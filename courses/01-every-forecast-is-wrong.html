@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Session 1 of 6. Forecast error as a planning input, not a failure: bias vs spread, ABC/XYZ segments, and where a learned model earns its place against a spreadsheet, run live on 45 real SKUs.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Every forecast is wrong: budget the error - learn ai supply chain with phoebe">
+<meta property="og:description" content="Session 1 of 6. On 45 real SKUs the learned model beat the best spreadsheet method by 2.7 percent, and ran 17.3 percent short.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/courses/01-every-forecast-is-wrong.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Every forecast is wrong: budget the error - learn ai supply chain with phoebe">
+<meta name="twitter:description" content="Session 1 of 6. The question is never whether the forecast is wrong. It is by how much, which way, and on which SKUs.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Session 1 · Every forecast is wrong: budget the error - learn ai supply chain with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-supply-chain-with-phoebe</a> / Session 1 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI + Supply Chain with Phoebe · Session 1 of 6</div>
+    <h1>Every forecast is wrong: <span class="accent">budget the error</span></h1>
+    <p class="sub">The vendor says its forecast is 30 percent better. Better than what, on which SKUs, and wrong in which direction? Tonight you run five forecasters on 45 real products and 26 weeks no model saw, and read the error the way a planner has to: as an input with a size, a direction and an address. You leave with the first page of Northwick's AI planning playbook, the forecast-error budget every later session spends.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Start here</span>
+      <span class="chip audience">Ops and planning leads being sold an AI tool</span>
+      <span class="chip audience">Planners and analysts who will run it</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:3">0-3 · Welcome</span>
+      <span class="a2" style="flex:17">3-20 · Bias, spread, segments, evidence</span>
+      <span class="a3" style="flex:22">20-42 · Build-along: the error budget</span>
+      <span class="a4" style="flex:3">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Six sessions, one planning playbook</h2>
+    </div>
+    <p class="lede">Six sessions of 45 minutes, and <strong>one document that grows each time</strong>: Northwick's AI planning playbook. Northwick is a constructed mid-size homeware retailer with about 4,000 SKUs, two distribution centres, about 60 stores and an online shop. Every session adds one section, and session 6 prices the whole playbook on a live bench.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">Constructed Northwick example = invented, labelled every time</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Two kinds of forecast error and what each one costs, a way to split 4,000 SKUs into nine groups that deserve different treatment, and a live read of where a learned model beats a spreadsheet on real retail data and where it does not. Then the first section of Northwick's playbook: an error budget per segment, with an owner.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The question every session comes back to<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>An AI planning vendor says the forecast is 30 percent better. Two questions sit behind that sentence, and the slide answers neither: <strong>how much stock, service and cash does that actually move, and where does a spreadsheet still win?</strong></p>
+        <p>Sessions 1 and 2 turn forecast error into stock. Sessions 3 and 4 follow the stock when there is not enough of it, or when the chain amplifies a swing. Session 5 decides when a person may change the number. Session 6 prices all of it. No vendor account and no code are needed: every build-along runs in your browser or on the playbook page.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>McKinsey pages are reported to say AI forecasting can cut forecast errors by "20 and 50%", and another by "30 to 50 percent". We could not read the pages themselves, and no snippet showed a study, a sample or a baseline behind the range. That is the shape of most claims you will be handed: a big number with no "better than what". Tonight you build the "than what".</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers bias, spread and why error is an input</span>
+      <h2>Two errors with two different bills</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">A forecast can be wrong in two ways. It can sit on one side of what sells, week after week: that is <strong>bias</strong>, and it is a habit you can fix. Or it can be right on average and wrong every single week: that is <strong>spread</strong>, and you cannot fix it, only pay for it, in safety stock.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two panels of eight weeks each. Left: the forecast line sits above every actual week, a bias, and the fix is to move the level. Right: the forecast is right on average but every week lands above or below it, a spread, and the cost is safety stock sized from that spread.">
+        <defs>
+          <filter id="s1aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s1aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s1aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s1aH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s1aL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s1aS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s1aI { font: 400 11px Inter, sans-serif; fill: #18200C; }
+          .s1aB { font: 800 11px Inter, sans-serif; fill: #5E4500; }
+          .s1aN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s1aH" x="40" y="28">BIAS: ALWAYS ON ONE SIDE</text>
+        <text class="s1aH" x="480" y="28">SPREAD: RIGHT ON AVERAGE, WRONG EVERY WEEK</text>
+
+        <g filter="url(#s1aSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="44" width="360" height="150" rx="8" transform="rotate(-0.4 220 119)" fill="#FFFFFF"/>
+          <rect x="480" y="44" width="360" height="150" rx="8" transform="rotate(0.4 660 119)" fill="#FFFFFF"/>
+          <path d="M60 86 L380 86" stroke="#3D5020" stroke-dasharray="7 5"/>
+          <circle cx="80" cy="132" r="6" fill="#26330F"/>
+          <circle cx="120" cy="120" r="6" fill="#26330F"/>
+          <circle cx="160" cy="140" r="6" fill="#26330F"/>
+          <circle cx="200" cy="126" r="6" fill="#26330F"/>
+          <circle cx="240" cy="136" r="6" fill="#26330F"/>
+          <circle cx="280" cy="118" r="6" fill="#26330F"/>
+          <circle cx="320" cy="134" r="6" fill="#26330F"/>
+          <circle cx="360" cy="124" r="6" fill="#26330F"/>
+          <path d="M500 118 L820 118" stroke="#3D5020" stroke-dasharray="7 5"/>
+          <circle cx="520" cy="84" r="6" fill="#26330F"/>
+          <circle cx="560" cy="156" r="6" fill="#26330F"/>
+          <circle cx="600" cy="96" r="6" fill="#26330F"/>
+          <circle cx="640" cy="150" r="6" fill="#26330F"/>
+          <circle cx="680" cy="80" r="6" fill="#26330F"/>
+          <circle cx="720" cy="160" r="6" fill="#26330F"/>
+          <circle cx="760" cy="100" r="6" fill="#26330F"/>
+          <circle cx="800" cy="142" r="6" fill="#26330F"/>
+          <path d="M220 200 L220 228" marker-end="url(#s1aAr)"/>
+          <path d="M660 200 L660 228" marker-end="url(#s1aAr)"/>
+          <rect x="60" y="236" width="320" height="52" rx="8" transform="rotate(0.5 220 262)" fill="#F2F5E8"/>
+          <rect x="500" y="236" width="320" height="52" rx="8" transform="rotate(-0.5 660 262)" fill="#F2C200"/>
+        </g>
+
+        <text class="s1aS" x="60" y="72">forecast, dashed</text>
+        <text class="s1aS" x="60" y="182">units sold, eight weeks</text>
+        <text class="s1aS" x="500" y="182">units sold, eight weeks</text>
+        <text class="s1aS" x="700" y="72">forecast, dashed</text>
+        <text class="s1aL" x="76" y="258">Fix it: move the level</text>
+        <text class="s1aS" x="76" y="276">a habit, so a rule can correct it</text>
+        <text class="s1aL" x="516" y="258">Pay for it: safety stock</text>
+        <text class="s1aI" x="516" y="276">sized from the spread, session 2</text>
+
+        <text class="s1aN" x="40" y="314">Both panels have the same total error. Only one of them can be trained away.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - bias is a habit you correct; spread is a cost you budget</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Two numbers that describe any forecast<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <tr><th>Number</th><th>What it counts</th><th>What a planner does with it</th></tr>
+          <tr><td><strong>WAPE</strong></td><td>Units the forecast got wrong, in either direction, per unit actually sold, added up over SKUs and weeks</td><td>Sizes the spread: the bigger it is, the more safety stock the same service costs</td></tr>
+          <tr><td><strong>Bias</strong></td><td>Units forecast minus units sold, per unit sold, with the sign kept</td><td>Says which way the forecast leans: plus means stock piles up, minus means shelves empty</td></tr>
+        </table>
+        <p>Two numbers, always together. A forecast with a small WAPE and a big bias is precise about the wrong level. A forecast with zero bias and a big WAPE is honest and expensive. The definitions, their traps (WAPE on intermittent demand, MAPE dividing by zero) and how to backtest them belong to <a href="https://phoebefu6.github.io/learn-timeseries-forecasting-with-phoebe/courses/a5-measuring-forecasts.html">Timeseries Forecasting: measuring a forecast ↗</a> and <a href="https://phoebefu6.github.io/learn-timeseries-forecasting-with-phoebe/courses/b8-backtesting-metrics.html">backtesting and metrics ↗</a>. Here they are used, not retaught.</p>
+        <div class="callout tip">
+          <p><strong>The one-line test.</strong> Ask of any accuracy claim: was the sign thrown away? If the slide shows only one accuracy number, you do not yet know whether the error will cost you stock or cost you sales.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why "wrong" is a planning input, not a failure<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A planner who treats the forecast as a promise orders exactly the forecast and is surprised every week. A planner who treats it as a distribution orders the forecast plus a buffer sized by the spread, and corrects the level when the bias shows. The second planner is not more pessimistic. They are using the error as information.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>In the playground below, "same week last year" forecasts the 45 real SKUs <strong>38.3 percent too high</strong> over the 26 holdout weeks. These products sold less in the second half of 2011 than in the same weeks of 2010. Nothing about that forecast was careless; it simply assumed last year would repeat. Bias is often a stale assumption, not a bad person.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers ABC/XYZ segmentation</span>
+      <h2>Not every SKU deserves the same forecast</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Four thousand SKUs do not get four thousand forecasting decisions. They get nine. Cut once by how much money each SKU makes (ABC) and once by how jumpy its weekly demand is (XYZ), and each of the nine cells earns its own method, its own service target and its own tolerance for error.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The real catalogue of 1,952 SKUs sold from start to end, cut three ways by revenue and three ways by weekly volatility. Counts per cell: AX 404, AY 132, AZ 49, BX 187, BY 215, BZ 136, CX 60, CY 303, CZ 466. The textbook steady cut, coefficient of variation at or under 0.5, finds only 2 SKUs.">
+        <defs>
+          <filter id="s1bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="13" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+        </defs>
+        <style>
+          .s1bH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s1bL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s1bS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s1bV { font: 800 18px Inter, sans-serif; fill: #26330F; }
+          .s1bW { font: 800 18px Inter, sans-serif; fill: #FFFFFF; }
+          .s1bA { font: 700 11px Inter, sans-serif; fill: #3D5020; }
+          .s1bN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s1bH" x="40" y="26">1,952 REAL SKUS, NINE DECISIONS</text>
+        <text class="s1bS" x="300" y="26">UCI Online Retail II, sold from first to last quarter</text>
+
+        <text class="s1bA" x="280" y="56" text-anchor="middle">X · steadiest third</text>
+        <text class="s1bA" x="490" y="56" text-anchor="middle">Y · middle third</text>
+        <text class="s1bA" x="700" y="56" text-anchor="middle">Z · jumpiest third</text>
+
+        <g filter="url(#s1bSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="180" y="68" width="200" height="56" rx="8" transform="rotate(-0.5 280 96)" fill="#3D5020"/>
+          <rect x="390" y="68" width="200" height="56" rx="8" transform="rotate(0.4 490 96)" fill="#C9D6A8"/>
+          <rect x="600" y="68" width="200" height="56" rx="8" transform="rotate(-0.3 700 96)" fill="#F2F5E8"/>
+          <rect x="180" y="134" width="200" height="56" rx="8" transform="rotate(0.4 280 162)" fill="#C9D6A8"/>
+          <rect x="390" y="134" width="200" height="56" rx="8" transform="rotate(-0.4 490 162)" fill="#C9D6A8"/>
+          <rect x="600" y="134" width="200" height="56" rx="8" transform="rotate(0.5 700 162)" fill="#C9D6A8"/>
+          <rect x="180" y="200" width="200" height="56" rx="8" transform="rotate(-0.4 280 228)" fill="#F2F5E8"/>
+          <rect x="390" y="200" width="200" height="56" rx="8" transform="rotate(0.3 490 228)" fill="#C9D6A8"/>
+          <rect x="600" y="200" width="200" height="56" rx="8" transform="rotate(-0.5 700 228)" fill="#3D5020"/>
+        </g>
+
+        <text class="s1bL" x="40" y="92">A · top 80%</text>
+        <text class="s1bS" x="40" y="108">of revenue</text>
+        <text class="s1bL" x="40" y="158">B · next 15%</text>
+        <text class="s1bS" x="40" y="174">of revenue</text>
+        <text class="s1bL" x="40" y="224">C · last 5%</text>
+        <text class="s1bS" x="40" y="240">of revenue</text>
+
+        <text class="s1bW" x="280" y="103" text-anchor="middle">404</text>
+        <text class="s1bV" x="490" y="103" text-anchor="middle">132</text>
+        <text class="s1bV" x="700" y="103" text-anchor="middle">49</text>
+        <text class="s1bV" x="280" y="169" text-anchor="middle">187</text>
+        <text class="s1bV" x="490" y="169" text-anchor="middle">215</text>
+        <text class="s1bV" x="700" y="169" text-anchor="middle">136</text>
+        <text class="s1bV" x="280" y="235" text-anchor="middle">60</text>
+        <text class="s1bV" x="490" y="235" text-anchor="middle">303</text>
+        <text class="s1bW" x="700" y="235" text-anchor="middle">466</text>
+
+        <text class="s1bN" x="40" y="290">The textbook steady cut (weekly CV at or under 0.5) finds 2 of these 1,952. Median CV is 2.05.</text>
+        <text class="s1bN" x="40" y="312">So the X, Y and Z lines here are this catalogue's own thirds: CV 1.59 and 2.55.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - most money sits in steady A items; most SKUs sit in jumpy, low-value C items</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>How to cut the catalogue in two passes<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>ABC by value.</strong> Sort SKUs by revenue over the fit period, largest first. The ones that make the first 80 percent are A, the next 15 percent B, the rest C. Value, not units: a lantern that sells 50 a week at a high price outranks a card that sells 500 at a low one.</li>
+          <li><strong>XYZ by volatility.</strong> For each SKU, divide the standard deviation of weekly demand by its mean: the coefficient of variation, CV. Low CV is steady (X), high is jumpy (Z).</li>
+          <li><strong>Cross them.</strong> Nine cells. AX items are worth a lot and behave; CZ items are worth little and behave badly. They deserve different methods, service levels and attention, which is the point.</li>
+        </ul>
+        <div class="callout tip">
+          <p><strong>Set the cut from your own catalogue.</strong> Textbook XYZ thresholds (often CV 0.5 and 1.0) were written for steady consumer demand. On this wholesale-heavy retailer they put 2 SKUs in X and 1,729 in Z, which is no segmentation at all. Thirds of your own CV distribution always give three usable groups.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why this real catalogue is so jumpy<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The data behind every number on this page is the UCI "Online Retail II" dataset: 1,067,371 invoice lines from a UK-based online retailer of giftware and homeware, December 2009 to December 2011, released under CC BY 4.0. The dataset card notes that "many customers of the company are wholesalers". A wholesaler buys 24 lanterns once a month, so one SKU's weekly demand looks like a comb: zero, zero, 24, zero. That is real and it is why CVs above 2 are normal here.</p>
+        <p>Northwick, the constructed retailer in every build-along, sells through stores and online, so its weekly demand would be smoother than this. The method does not change; the thresholds do. Your numbers will differ.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Invoices whose code starts with "C" are cancellations in this dataset. The weekly series here net them in, so a 1,000-unit order cancelled the same week counts as zero, not as a spike. Every real demand series has a cleaning rule like this one, and every rule moves the error you measure. Write yours down.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers where AI forecasting earns its place</span>
+      <h2>Where a learned model earns its place, and where a spreadsheet wins</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">A learned model is worth paying for when there are many SKUs to learn from, when demand moves with things a spreadsheet cannot see (promotions, weather, a competitor's price), and when the history is long enough to learn a shape. On a few steady SKUs with short history, a moving average is hard to beat and costs nothing.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The playground's real result per segment: how much better or worse the learned model is than the best of four spreadsheet methods, in WAPE. AX minus 2.1 percent, AY plus 2.8, AZ plus 3.6, BX minus 1.4, BY plus 4.5, BZ plus 10.0, CX plus 0.2, CY minus 8.9, CZ plus 2.3. It wins most jumpy cells and loses the steady A and B cells and CY.">
+        <defs>
+          <filter id="s1cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="21" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+        </defs>
+        <style>
+          .s1cH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s1cL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s1cS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s1cI { font: 400 11px Inter, sans-serif; fill: #18200C; }
+          .s1cV { font: 800 18px Inter, sans-serif; fill: #26330F; }
+          .s1cA { font: 700 11px Inter, sans-serif; fill: #3D5020; }
+          .s1cN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s1cH" x="40" y="26">LEARNED MODEL VS THE BEST SPREADSHEET, PER CELL</text>
+        <text class="s1cS" x="420" y="26">45 real SKUs, 26 holdout weeks, WAPE</text>
+
+        <text class="s1cA" x="280" y="56" text-anchor="middle">X · steady</text>
+        <text class="s1cA" x="490" y="56" text-anchor="middle">Y · jumpy</text>
+        <text class="s1cA" x="700" y="56" text-anchor="middle">Z · very jumpy</text>
+
+        <g filter="url(#s1cSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="180" y="68" width="200" height="60" rx="8" transform="rotate(-0.5 280 98)" fill="#F2C200"/>
+          <rect x="390" y="68" width="200" height="60" rx="8" transform="rotate(0.4 490 98)" fill="#F2F5E8"/>
+          <rect x="600" y="68" width="200" height="60" rx="8" transform="rotate(-0.3 700 98)" fill="#F2F5E8"/>
+          <rect x="180" y="138" width="200" height="60" rx="8" transform="rotate(0.4 280 168)" fill="#F2C200"/>
+          <rect x="390" y="138" width="200" height="60" rx="8" transform="rotate(-0.4 490 168)" fill="#F2F5E8"/>
+          <rect x="600" y="138" width="200" height="60" rx="8" transform="rotate(0.5 700 168)" fill="#C9D6A8"/>
+          <rect x="180" y="208" width="200" height="60" rx="8" transform="rotate(-0.4 280 238)" fill="#FFFFFF"/>
+          <rect x="390" y="208" width="200" height="60" rx="8" transform="rotate(0.3 490 238)" fill="#F2C200"/>
+          <rect x="600" y="208" width="200" height="60" rx="8" transform="rotate(-0.5 700 238)" fill="#F2F5E8"/>
+        </g>
+
+        <text class="s1cL" x="40" y="102">A items</text>
+        <text class="s1cL" x="40" y="172">B items</text>
+        <text class="s1cL" x="40" y="242">C items</text>
+
+        <text class="s1cV" x="280" y="96" text-anchor="middle">-2.1%</text>
+        <text class="s1cI" x="280" y="116" text-anchor="middle">smoothing wins</text>
+        <text class="s1cV" x="490" y="96" text-anchor="middle">+2.8%</text>
+        <text class="s1cS" x="490" y="116" text-anchor="middle">learned wins</text>
+        <text class="s1cV" x="700" y="96" text-anchor="middle">+3.6%</text>
+        <text class="s1cS" x="700" y="116" text-anchor="middle">learned wins</text>
+        <text class="s1cV" x="280" y="166" text-anchor="middle">-1.4%</text>
+        <text class="s1cI" x="280" y="186" text-anchor="middle">smoothing wins</text>
+        <text class="s1cV" x="490" y="166" text-anchor="middle">+4.5%</text>
+        <text class="s1cS" x="490" y="186" text-anchor="middle">learned wins</text>
+        <text class="s1cV" x="700" y="166" text-anchor="middle">+10.0%</text>
+        <text class="s1cS" x="700" y="186" text-anchor="middle">its best cell</text>
+        <text class="s1cV" x="280" y="236" text-anchor="middle">+0.2%</text>
+        <text class="s1cS" x="280" y="256" text-anchor="middle">a tie, in practice</text>
+        <text class="s1cV" x="490" y="236" text-anchor="middle">-8.9%</text>
+        <text class="s1cI" x="490" y="256" text-anchor="middle">last year's week wins</text>
+        <text class="s1cV" x="700" y="236" text-anchor="middle">+2.3%</text>
+        <text class="s1cS" x="700" y="256" text-anchor="middle">learned wins</text>
+
+        <text class="s1cN" x="40" y="300">Overall: learned 77.5% WAPE vs the 8-week average 79.6%, a 2.7% cut. It also runs 17.3% short.</text>
+        <text class="s1cN" x="40" y="322">Yellow cells: a free spreadsheet method did as well or better. Five SKUs a cell: read it as a direction.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the learned model earns its place on jumpy SKUs and gives nothing back on steady ones</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The strongest public evidence, and why it is not your number<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The M5 competition asked teams to forecast 42,840 Walmart daily unit-sales series (30,490 of them product by store) from 2011 to 2016. The competition paper (Makridakis, Spiliotis and Assimakopoulos, International Journal of Forecasting, 2022) reports that the top methods "focused on LightGBM implementations and variants", that the top five beat the best benchmark by "higher than 20%", and that the winner beat it by 22.4 percent. The benchmark was exponential smoothing, the same family as one of the methods in tonight's playground.</p>
+        <p>Read the same paper for the other half: of 5,507 teams, 415 (7.5 percent) beat that benchmark. Most entrants, many of them using machine learning, did not. And M5 had five years of daily history, prices, events and a product and store hierarchy to learn from. Tonight's 45 SKUs with 78 weeks of fit history are a much harder place to learn. Expect your own number to sit between the two, and measure it.</p>
+        <p>These figures are from the 2020 preprint of the paper; check them against the published version before you quote them in a contract.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Spreadsheet, classic model or AI: the general routing call<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Whether a problem needs a dashboard, a classic model or something larger is a general skill with its own course: <a href="https://phoebefu6.github.io/learn-when-ai-with-phoebe/courses/03-when-classic-ml-wins.html">When AI: when classic ML wins ↗</a>. In supply chain planning the call usually lands like this:</p>
+        <ul>
+          <li><strong>A spreadsheet method wins</strong> when SKUs are few and steady, history is short, and nothing outside the series drives demand. The playground's AX and BX cells.</li>
+          <li><strong>A learned model earns its place</strong> when there are many related SKUs to learn shared patterns from, demand is jumpy, and outside signals (promotions, events, price) are recorded. How those models work is taught in <a href="https://phoebefu6.github.io/learn-timeseries-forecasting-with-phoebe/courses/b6-ml-forecasting.html">Timeseries Forecasting: ML forecasting ↗</a>.</li>
+          <li><strong>Promotions</strong> are the single biggest outside signal in retail. Estimating how much a price cut moves demand is its own discipline: <a href="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/p1-demand-from-data.html">Economics: demand from data ↗</a>. Here they appear only as a spike the forecast should have expected.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Northwick's forecast-error budget, from 45 real SKUs</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">The playground runs five forecasters one week ahead on 45 real products, 5 from each ABC x XYZ cell, and scores them on the last 26 weeks of the data, which none of them saw while fitting. Everything is computed in your browser. You read three things from it and write the first section of Northwick's playbook.</p>
+
+    <div id="asc-play"></div>
+
+    <div class="steps">
+      <div class="step"><p><strong>Set the bar with a spreadsheet.</strong> Pick "8-week average". WAPE reads <strong>79.6%</strong>, bias -4.4%. That is the best of the four spreadsheet methods overall, and the number any AI tool must beat. Then pick "Naive (last week)": 90.9%. A vendor who compares against naive is choosing the easier opponent.</p>
+        <div class="prompt-box good"><span class="label">★ The bar</span>
+best spreadsheet method overall = 8-week average
+WAPE 79.6%, bias -4.4%   (naive: 90.9%)</div></div>
+      <div class="step"><p><strong>Run the learned model.</strong> Pick "Learned model". WAPE drops to <strong>77.5%</strong>, which the meter reads as <strong>+2.7%</strong> against the 8-week average. Now read the bias: <strong>-17.3%</strong>. It is more accurate and it runs short. Session 2 shows what a forecast that runs 17 percent short does to service.</p>
+        <div class="prompt-box good"><span class="label">★ The learned model</span>
+WAPE 77.5% (+2.7% vs the bar, +14.8% vs naive)
+bias -17.3%: forecasts sit below what sold</div></div>
+      <div class="step"><p><strong>Read the grid, cell by cell.</strong> Olive cells are where the learned model beats the best spreadsheet method in that cell; yellow where it does not. It wins <strong>6 of 9</strong>: its best is BZ (+10.0%), and it loses AX to exponential smoothing and CY to same-week-last-year (-8.9%). Open "Look at one SKU" and pick an AX item, then a BZ item, to see why.</p>
+        <div class="prompt-box good"><span class="label">★ Where it earns its place</span>
+wins: AY +2.8  AZ +3.6  BY +4.5  BZ +10.0  CX +0.2  CZ +2.3
+loses: AX -2.1 (smoothing)  BX -1.4 (smoothing)  CY -8.9 (last year)</div></div>
+      <div class="step"><p><strong>Try the planner's habit.</strong> With the learned model on, drag the override to <strong>+15%</strong>. Bias improves to -4.9%, and WAPE gets worse: <strong>79.8%</strong>, now behind the 8-week average. A blanket correction fixes the lean and adds error everywhere it was not needed. Session 5 is about doing this properly. Set it back to 0.</p></div>
+      <div class="step"><p><strong>Write the budget into the playbook.</strong> Copy this into section 1 of your own version of Northwick's playbook and replace the numbers with yours when you have them.</p>
+        <div class="prompt-box good"><span class="label">★ Playbook section 1 · the forecast-error budget</span>
+Bar to beat: our best spreadsheet method per segment, never naive.
+Steady cells (AX, BX): exponential smoothing; WAPE about 54-78%.
+Jumpy cells (Y, Z): learned model where it wins on our holdout.
+Bias budget: the learned model runs 17% short; stock must know.
+Every claimed improvement is measured on weeks the model never saw.
+Owner: the demand planning lead.
+Constructed Northwick example on real UCI demand. Yours will differ.</div></div>
+    </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Northwick's AI planning playbook as a one-page document with six sections. Section 1, the forecast-error budget, is filled tonight; sections 2 to 6 are empty and labelled with the session that fills them. Tonight's section names the bar to beat, the method per segment, the bias budget and the owner.">
+        <defs>
+          <filter id="s1dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="29" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s1dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s1dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s1dH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s1dL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s1dS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s1dA { font: 700 11px Inter, sans-serif; fill: #3D5020; }
+          .s1dN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s1dH" x="40" y="28">NORTHWICK'S AI PLANNING PLAYBOOK</text>
+        <text class="s1dS" x="310" y="28">constructed, one page</text>
+
+        <g filter="url(#s1dSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="40" width="360" height="226" rx="6" transform="rotate(-0.5 220 153)" fill="#FFFFFF"/>
+          <rect x="54" y="52" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#3D5020"/>
+          <rect x="54" y="88" width="332" height="30" rx="4" fill="url(#s1dHc)" stroke="#CDD3BF"/>
+          <rect x="54" y="124" width="332" height="30" rx="4" fill="url(#s1dHc)" stroke="#CDD3BF"/>
+          <rect x="54" y="160" width="332" height="30" rx="4" fill="url(#s1dHc)" stroke="#CDD3BF"/>
+          <rect x="54" y="196" width="332" height="30" rx="4" fill="url(#s1dHc)" stroke="#CDD3BF"/>
+          <rect x="54" y="232" width="332" height="26" rx="4" fill="url(#s1dHc)" stroke="#CDD3BF"/>
+          <path d="M392 67 C420 67 420 80 436 80" marker-end="url(#s1dAr)"/>
+          <rect x="444" y="52" width="410" height="206" rx="10" transform="rotate(0.4 649 155)" fill="#F2F5E8"/>
+        </g>
+
+        <text class="s1dL" x="66" y="72">1 · Forecast-error budget</text>
+        <text class="s1dA" x="376" y="72" text-anchor="end">tonight</text>
+        <text class="s1dL" x="66" y="108">2 · Stock policy</text>
+        <text class="s1dS" x="376" y="108" text-anchor="end">s2</text>
+        <text class="s1dL" x="66" y="144">3 · Allocation rules</text>
+        <text class="s1dS" x="376" y="144" text-anchor="end">s3</text>
+        <text class="s1dL" x="66" y="180">4 · Disruption playbook</text>
+        <text class="s1dS" x="376" y="180" text-anchor="end">s4</text>
+        <text class="s1dL" x="66" y="216">5 · Override rules</text>
+        <text class="s1dS" x="376" y="216" text-anchor="end">s5</text>
+        <text class="s1dL" x="66" y="250">6 · Business case</text>
+        <text class="s1dS" x="376" y="250" text-anchor="end">s6</text>
+
+        <text class="s1dH" x="462" y="80">TONIGHT'S SECTION</text>
+        <text class="s1dL" x="462" y="108">Bar to beat: best spreadsheet per segment.</text>
+        <text class="s1dL" x="462" y="132">Steady cells: exponential smoothing.</text>
+        <text class="s1dL" x="462" y="156">Jumpy cells: learned, where it wins.</text>
+        <text class="s1dL" x="462" y="180">Bias budget: learned runs 17% short.</text>
+        <text class="s1dL" x="462" y="204">Measured on weeks no model saw.</text>
+        <text class="s1dL" x="462" y="236">Owner: the demand planning lead.</text>
+
+        <text class="s1dN" x="40" y="290">Five empty sections, five sessions. Each one spends tonight's error budget.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the first section is the one every later number is measured against</figcaption>
+    </figure>
+
+    <div class="wipe" data-title="The same result, reported two ways" data-label-a="Vendor slide" data-label-b="Northwick's error budget" data-foot="Drag to compare. Both are true of the same 26 weeks.">
+      <div class="wipe-a">
+        <p><strong>AI forecast: 14.8% more accurate.</strong></p>
+        <p>Measured against a naive forecast across 45 SKUs. One number, no sign, no segments.</p>
+      </div>
+      <div class="wipe-b">
+        <p><strong>2.7% better than our best spreadsheet, 17.3% short.</strong></p>
+        <p>Wins 6 of 9 segments, best on BZ. Loses steady A and B items to exponential smoothing.</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Why 2.7 percent is not a verdict.</strong> Five SKUs per cell is a small sample, the learned model here is deliberately small, and Northwick's own data would behave differently. What transfers is the method: name the bar, score on weeks the model never saw, keep the sign, and read the result per segment. Session 6 asks how big the cut must be before the tool pays for itself.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 2</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Find the "than what".</strong> Take any accuracy claim you have been shown, by a vendor or a colleague. Write down what it was compared against, over which weeks, and whether those weeks were held out. If you cannot find out, write that down too.</li>
+      <li><strong>Cut your own catalogue.</strong> Pull a year of weekly sales for your SKUs, compute revenue share (ABC) and CV (XYZ), and count the nine cells. Note whether textbook thresholds would have given you three usable XYZ groups.</li>
+      <li><strong>Measure one bias.</strong> For one cell, compare last quarter's forecasts with what sold, keeping the sign. Is the lean the same every month?</li>
+      <li><strong>Draft section 1.</strong> Write your own forecast-error budget in the five lines of tonight's playbook section, with your own owner.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and session 1 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · A vendor reports its forecast is 14.8 percent more accurate. On the same 26 weeks it is 2.7 percent better than your 8-week average. What explains the gap?</p>
+      <button class="qopt" type="button">A · The vendor measured on different SKUs</button>
+      <button class="qopt" type="button">B · The 14.8 percent is against a naive forecast; your best spreadsheet method is a harder bar</button>
+      <button class="qopt" type="button">C · One of the two numbers must be miscalculated</button>
+      <p class="qwhy">Both numbers are true on the playground. Naive scores 90.9 percent WAPE, the 8-week average 79.6, the learned model 77.5. The improvement depends entirely on the opponent, which is why the playbook names the bar.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · The learned model has the lowest WAPE and a bias of -17.3 percent. What does the bias tell a planner that WAPE does not?</p>
+      <button class="qopt" type="button">A · Its forecasts sit below what sold, so stock set from it runs short unless something corrects the level</button>
+      <button class="qopt" type="button">B · It is 17.3 percent less accurate than WAPE suggests</button>
+      <button class="qopt" type="button">C · Nothing useful, because WAPE already includes every error</button>
+      <p class="qwhy">WAPE throws the sign away. Bias keeps it: minus means the forecast leans low, so a stock policy built on it empties shelves more often than its service target promises. Session 2 measures exactly that.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">3 · On the playground, where does a free spreadsheet method do as well as or better than the learned model?</p>
+      <button class="qopt" type="button">A · Nowhere: the learned model wins every cell</button>
+      <button class="qopt" type="button">B · Only in the C items, which are too small to matter</button>
+      <button class="qopt" type="button">C · In the steady A and B cells, where exponential smoothing wins, and in CY</button>
+      <p class="qwhy">AX and BX go to exponential smoothing, CY to same-week-last-year, and CX is a tie. The learned model earns its place on the jumpy cells, best on BZ at +10.0 percent.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ OFFICIAL COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">UCI Online Retail II (Chen, 2012)</span><span class="note">1,067,371 rows, Dec 2009 to Dec 2011, CC BY 4.0, doi 10.24432/C5CG6D. Read at the UCI repository and downloaded; 45 SKUs sampled</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">M5 accuracy competition (Makridakis, Spiliotis, Assimakopoulos, IJF 2022)</span><span class="note">42,840 series, LightGBM variants on top, 22.4 percent over the best benchmark, 7.5 percent of teams beat it. Read in the 2020 preprint</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">ABC/XYZ segmentation</span><span class="note">Revenue cut 80/15/5 and CV terciles, computed on the real catalogue; the textbook CV cut finds 2 of 1,952</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">McKinsey on AI forecasting</span><span class="note">"20 and 50%" error reduction, reported from search snippets only; no basis visible. Taught as a claim</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Forecast metrics and backtesting</span><span class="note">Linked, not retaught: Timeseries Forecasting a5 and b8 own WAPE, bias and holdouts</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">ML forecasting methods</span><span class="note">Linked, not retaught: Timeseries Forecasting b6 and When AI 03</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 1 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Bias</b><span>Which way the forecast leans. A habit: correct the level.</span></div>
+      <div class="cheat-item"><b>Spread</b><span>How far it misses each week. A cost: budget safety stock.</span></div>
+      <div class="cheat-item"><b>The bar</b><span>Your best spreadsheet method per segment, never naive.</span></div>
+      <div class="cheat-item"><b>ABC x XYZ</b><span>Value x volatility. Nine cells, nine treatments. Cut XYZ from your own data.</span></div>
+      <div class="cheat-item"><b>Where AI earns it</b><span>Many related, jumpy SKUs with outside signals. Here: +10.0 percent on BZ.</span></div>
+      <div class="cheat-item"><b>Where a sheet wins</b><span>Few, steady SKUs, short history. Here: AX and BX to smoothing.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You know how wrong each forecast is. Session 2 turns that error into stock: the same 45 SKUs, a service target per class, and the moment a policy that promised 98 percent on A items delivers less on weeks it never saw.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Session 1 of 6 · learn-ai-supply-chain-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="../index.html">← All sessions</a> &nbsp;·&nbsp; <a href="02-from-forecast-to-stock.html">Next: From forecast to stock: safety stock and service level →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/asc-sample.js?v=1"></script>
+<script src="../assets/asc-live.js?v=1"></script>
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

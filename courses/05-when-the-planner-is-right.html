@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Session 5 of 6. Forecast value added, when judgmental adjustments help, and the disagreement between algorithm aversion and automation bias, run live on the override slider over 45 real SKUs.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="When the planner is right: overrides and trust - learn ai supply chain with phoebe">
+<meta property="og:description" content="Session 5 of 6. A blanket +15 percent override shrinks the learned model's bias from -17.3 to -4.9 percent, and makes its WAPE worse. Score every step, not just the model.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/courses/05-when-the-planner-is-right.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="When the planner is right: overrides and trust - learn ai supply chain with phoebe">
+<meta name="twitter:description" content="Session 5 of 6. Every hand on the forecast gets scored. The question is not whether planners may override, but which overrides earn their place.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Session 5 · When the planner is right: overrides and trust - learn ai supply chain with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-supply-chain-with-phoebe</a> / Session 5 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI + Supply Chain with Phoebe · Session 5 of 6</div>
+    <h1>When the planner is right: <span class="accent">overrides and trust</span></h1>
+    <p class="sub">Every planner has changed a number they did not believe. Sometimes they were right, sometimes they were nervous, and almost nobody checked which. Tonight you score every hand that touches Northwick's forecast, read what the evidence says about when adjustments help, and face a real disagreement about trust that the research has not settled. You leave with section 5 of the playbook: the override rules.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Hands-on</span>
+      <span class="chip audience">Ops and planning leads being sold an AI tool</span>
+      <span class="chip audience">Planners and analysts who will run it</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:3">0-3 · Welcome</span>
+      <span class="a2" style="flex:17">3-20 · Value added, adjustments, trust</span>
+      <span class="a3" style="flex:22">20-42 · Build-along: Northwick's override rules</span>
+      <span class="a4" style="flex:3">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The number a person is allowed to change</h2>
+    </div>
+    <p class="lede">Four sections of Northwick's playbook are written: the error budget, the stock policy, the allocation rules and the disruption playbook. Every one of them assumes a forecast. Tonight's question is <strong>who may change that forecast, by how much, and how anyone will know whether the change helped</strong>. Northwick is a constructed mid-size homeware retailer: about 4,000 SKUs, DC North and DC South, about 60 stores and an online shop.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">Constructed Northwick example = invented, labelled every time</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A way to score every step in the forecast chain against the one before it, what a study of more than 60,000 forecasts reports about which adjustments help, both sides of the argument about whether planners trust models too little or too much, and section 5 of Northwick's playbook: override rules with a reason code, a size, a log and an owner.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why overrides get their own section<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>In session 1 you dragged the override slider to +15 percent and watched two things happen at once: the learned model's bias shrank from <strong>-17.3%</strong> to <strong>-4.9%</strong>, and its WAPE rose from <strong>77.5%</strong> to <strong>79.8%</strong>, behind the free 8-week average. The planner fixed the lean and paid for it in accuracy on every SKU that did not need the help.</p>
+        <p>That is the whole tension of tonight in one slider. A planner knows things a model cannot see: a store refit, a supplier letter, a competitor closing down. A planner also has habits, moods and a boss who hates empty shelves. The override rules exist to keep the first and measure away the second.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The forecasting reference "Forecasting: theory and practice" (Petropoulos et al., International Journal of Forecasting, 2022) calls a step in the forecasting process that does not improve the forecast "process waste". Most planning teams have never measured whether their review meeting is one.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers forecast value added</span>
+      <h2>Score every hand on the forecast</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">A forecast is rarely one number from one model. It passes through a chain: a statistical method, a planner's override, a consensus meeting. <strong>Forecast value added</strong> (FVA) scores each link. Petropoulos et al. define it as "the change in a forecasting performance metric that can be attributed to a particular step or participant", attributing the idea to Gilliland in 2002. You start from a naive forecast and ask, step by step, whether each one made the number better.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 272" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A forecast chain of five steps with WAPE at each. Naive last week 90.9 percent, 8-week average 79.6, learned model 77.5, planner override plus 15 percent 79.8, consensus meeting illustrative with no number. Forecast value added between steps: plus 11.3 points, plus 2.1 points, minus 2.3 points for the override, and unscored for the meeting.">
+        <defs>
+          <filter id="s5aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="5" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s5aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s5aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s5aH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s5aL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s5aS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s5aT { font: 400 11px Inter, sans-serif; fill: #18200C; }
+          .s5aB { font: 800 11px Inter, sans-serif; fill: #5E4500; }
+          .s5aV { font: 800 18px Inter, sans-serif; fill: #26330F; }
+          .s5aK { font: 800 18px Inter, sans-serif; fill: #18200C; }
+          .s5aN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s5aH" x="40" y="28">ONE FORECAST, FIVE HANDS ON IT</text>
+        <text class="s5aS" x="300" y="28">45 real SKUs, 26 holdout weeks, WAPE: lower is better</text>
+
+        <g filter="url(#s5aSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="24" y="48" width="148" height="84" rx="8" transform="rotate(-0.5 98 90)" fill="url(#s5aHc)"/>
+          <rect x="196" y="48" width="148" height="84" rx="8" transform="rotate(0.4 270 90)" fill="#F2F5E8"/>
+          <rect x="368" y="48" width="148" height="84" rx="8" transform="rotate(-0.4 442 90)" fill="#F2F5E8"/>
+          <rect x="540" y="48" width="148" height="84" rx="8" transform="rotate(0.5 614 90)" fill="#F2C200"/>
+          <rect x="712" y="48" width="148" height="84" rx="8" transform="rotate(-0.3 786 90)" fill="#FFFFFF" stroke-dasharray="7 5"/>
+          <path d="M175 90 L193 90" marker-end="url(#s5aAr)"/>
+          <path d="M347 90 L365 90" marker-end="url(#s5aAr)"/>
+          <path d="M519 90 L537 90" marker-end="url(#s5aAr)"/>
+          <path d="M691 90 L709 90" marker-end="url(#s5aAr)"/>
+          <path d="M184 100 L184 150" stroke="#5C7330"/>
+          <path d="M356 100 L356 150" stroke="#5C7330"/>
+          <path d="M528 100 L528 150" stroke="#5C7330"/>
+          <path d="M700 100 L700 150" stroke="#5C7330"/>
+          <rect x="116" y="152" width="136" height="50" rx="10" transform="rotate(0.4 184 177)" fill="#FFFFFF"/>
+          <rect x="288" y="152" width="136" height="50" rx="10" transform="rotate(-0.4 356 177)" fill="#FFFFFF"/>
+          <rect x="460" y="152" width="136" height="50" rx="10" transform="rotate(0.3 528 177)" fill="#FFFFFF" stroke="#5E4500"/>
+          <rect x="632" y="152" width="136" height="50" rx="10" transform="rotate(-0.3 700 177)" fill="#FFFFFF" stroke-dasharray="7 5"/>
+        </g>
+
+        <text class="s5aL" x="98" y="72" text-anchor="middle">Naive (last week)</text>
+        <text class="s5aS" x="98" y="88" text-anchor="middle">the floor</text>
+        <text class="s5aV" x="98" y="118" text-anchor="middle">90.9%</text>
+        <text class="s5aL" x="270" y="72" text-anchor="middle">8-week average</text>
+        <text class="s5aS" x="270" y="88" text-anchor="middle">best spreadsheet</text>
+        <text class="s5aV" x="270" y="118" text-anchor="middle">79.6%</text>
+        <text class="s5aL" x="442" y="72" text-anchor="middle">Learned model</text>
+        <text class="s5aS" x="442" y="88" text-anchor="middle">the AI step</text>
+        <text class="s5aV" x="442" y="118" text-anchor="middle">77.5%</text>
+        <text class="s5aL" x="614" y="72" text-anchor="middle">Planner +15%</text>
+        <text class="s5aT" x="614" y="88" text-anchor="middle">override on top</text>
+        <text class="s5aK" x="614" y="118" text-anchor="middle">79.8%</text>
+        <text class="s5aL" x="786" y="72" text-anchor="middle">Consensus meeting</text>
+        <text class="s5aS" x="786" y="88" text-anchor="middle">illustrative</text>
+        <text class="s5aV" x="786" y="118" text-anchor="middle">?</text>
+
+        <text class="s5aL" x="184" y="174" text-anchor="middle">FVA +11.3 pts</text>
+        <text class="s5aS" x="184" y="192" text-anchor="middle">better than naive</text>
+        <text class="s5aL" x="356" y="174" text-anchor="middle">FVA +2.1 pts</text>
+        <text class="s5aS" x="356" y="192" text-anchor="middle">better than step 2</text>
+        <text class="s5aB" x="528" y="174" text-anchor="middle">FVA -2.3 pts</text>
+        <text class="s5aB" x="528" y="192" text-anchor="middle">worse than step 3</text>
+        <text class="s5aL" x="700" y="174" text-anchor="middle">FVA: score it</text>
+        <text class="s5aS" x="700" y="192" text-anchor="middle">never measured here</text>
+
+        <text class="s5aN" x="40" y="232">Points of WAPE between neighbours. Steps 1 to 4 are real playground numbers; step 5 is illustrative.</text>
+        <text class="s5aN" x="40" y="254">Yellow: the one step that made the forecast worse. FVA says retire it, or bound it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - every step is scored against the one before it, and the planner's step can be negative</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Score every step, not just the model<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Most accuracy reports score one number: the final forecast against what sold. That tells you how good the whole chain is and nothing about which link earns its keep. FVA asks the same question at every handover:</p>
+        <ul>
+          <li><strong>Naive to statistical.</strong> Does the method beat "same as last week"? On the playground the 8-week average does, from 90.9% to 79.6%.</li>
+          <li><strong>Statistical to learned.</strong> Does the AI step beat the best free method? It does, narrowly: 79.6% to 77.5%.</li>
+          <li><strong>Model to planner.</strong> Does the override beat the forecast it overrode? A blanket +15% does not: 77.5% to 79.8%.</li>
+          <li><strong>Planner to meeting.</strong> Does the consensus meeting beat what the planner sent in? Nobody at Northwick has measured it. That is the point of logging.</li>
+        </ul>
+        <p>Petropoulos et al. call the steps that do not improve the forecast "process waste". Gilliland's own book on the method, "The Business Forecasting Deal" (Wiley, 2010), is reported to make the same case at length; we read the definition through the Petropoulos text, not the book.</p>
+        <div class="callout tip">
+          <p><strong>Keep the sign too.</strong> FVA is usually run on an accuracy metric. Run it on bias as well: the +15% override has negative FVA on WAPE and positive FVA on bias. Both are true, and the rules in the build-along need both.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Naive is the floor, not the bar<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>FVA starts from naive because naive costs nothing: any step that cannot beat it is destroying value outright. But clearing the floor is not the same as earning a place. In <a href="01-every-forecast-is-wrong.html">session 1</a> the bar was set at the best spreadsheet method, the 8-week average at 79.6%, because that is what Northwick would run without buying anything. A vendor who reports its gain against naive is choosing the easier opponent.</p>
+        <p>So read an FVA table twice. Against naive, it tells you whether a step is waste. Against the step before, it tells you whether that step is worth its cost. How naive and seasonal-naive baselines are built is taught in <a href="https://phoebefu6.github.io/learn-timeseries-forecasting-with-phoebe/courses/b2-decomposition-baselines.html">Timeseries Forecasting: decomposition and baselines ↗</a>.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers when adjustments help</span>
+      <h2>Big, rare and downward: what the evidence reports</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The largest field study of planners changing forecasts is Fildes, Goodwin, Lawrence and Nikolopoulos (International Journal of Forecasting, 2009). We have read its abstract, not its body, so everything below is <strong>what the abstract reports</strong>. Its shape is clear enough to write rules from: size and direction both matter, and they pull in different ways.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 328" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A two by two grid of adjustment size against direction, from the Fildes et al. 2009 abstract. Smaller adjustments often reduced accuracy; larger ones tended to improve it. Upward adjustments were much less likely to improve accuracy than downward ones, which the authors read as optimism bias. The small upward cell has both reported effects against it; the large downward cell has both in favour. No percentages per cell.">
+        <defs>
+          <filter id="s5bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="11" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+        </defs>
+        <style>
+          .s5bH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s5bL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s5bS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s5bT { font: 400 11px Inter, sans-serif; fill: #18200C; }
+          .s5bA { font: 700 11px Inter, sans-serif; fill: #3D5020; }
+          .s5bN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s5bH" x="40" y="28">WHEN A PLANNER'S CHANGE HELPS: SIZE x DIRECTION</text>
+        <text class="s5bS" x="40" y="46">Fildes, Goodwin, Lawrence, Nikolopoulos 2009, as the abstract reports. Directions only.</text>
+
+        <text class="s5bA" x="350" y="78" text-anchor="middle">Small adjustment</text>
+        <text class="s5bA" x="650" y="78" text-anchor="middle">Large adjustment</text>
+
+        <g filter="url(#s5bSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="210" y="88" width="280" height="80" rx="8" transform="rotate(-0.4 350 128)" fill="#F2C200"/>
+          <rect x="510" y="88" width="280" height="80" rx="8" transform="rotate(0.4 650 128)" fill="#F2F5E8"/>
+          <rect x="210" y="180" width="280" height="80" rx="8" transform="rotate(0.3 350 220)" fill="#F2F5E8"/>
+          <rect x="510" y="180" width="280" height="80" rx="8" transform="rotate(-0.4 650 220)" fill="#C9D6A8"/>
+        </g>
+
+        <text class="s5bL" x="40" y="118">Upward</text>
+        <text class="s5bS" x="40" y="136">planner raises it</text>
+        <text class="s5bS" x="40" y="152">authors: optimism bias</text>
+        <text class="s5bL" x="40" y="212">Downward</text>
+        <text class="s5bS" x="40" y="230">planner cuts it</text>
+
+        <text class="s5bL" x="226" y="118">Size: smaller ones often hurt</text>
+        <text class="s5bT" x="226" y="138">Direction: much less likely to help</text>
+        <text class="s5bT" x="226" y="156">both reported effects point against it</text>
+
+        <text class="s5bL" x="526" y="118">Size: larger ones tended to help</text>
+        <text class="s5bT" x="526" y="138">Direction: much less likely to help</text>
+        <text class="s5bT" x="526" y="156">the two effects pull apart</text>
+
+        <text class="s5bL" x="226" y="210">Size: smaller ones often hurt</text>
+        <text class="s5bT" x="226" y="230">Direction: more likely to help</text>
+        <text class="s5bT" x="226" y="248">the two effects pull apart</text>
+
+        <text class="s5bL" x="526" y="210">Size: larger ones tended to help</text>
+        <text class="s5bT" x="526" y="230">Direction: more likely to help</text>
+        <text class="s5bT" x="526" y="248">both reported effects point toward it</text>
+
+        <text class="s5bN" x="40" y="290">Over 60,000 forecasts, four supply-chain companies; adjustments helped on average in 3 of the 4.</text>
+        <text class="s5bN" x="40" y="312">Cells combine two separate findings from the abstract; no per-cell rate is quoted.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the small upward nudge is the adjustment both reported findings point against</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What 60,000 forecasts are reported to show<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The abstract reports more than 60,000 forecasts and outcomes from four supply-chain companies. In three of the four, planners' adjustments improved accuracy on average. So the headline is not "planners make it worse". It is narrower and more useful:</p>
+        <ul>
+          <li><strong>Size.</strong> Larger adjustments tended to improve accuracy; smaller ones often reduced it. A big change usually means the planner knows something specific. A small one is often a nudge for comfort.</li>
+          <li><strong>Direction.</strong> Upward adjustments were much less likely to improve accuracy than downward ones. The authors read this as optimism bias: people expect the product, the promotion or the season to do better than it will.</li>
+        </ul>
+        <p>Exact percentages per company or per cell are not in what we read, so none are quoted. The rule-writing consequence does not need them: discourage small changes, and put a second pair of eyes on upward ones.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The same study is the reason many planning teams ask for a reason code with every override. If you cannot say why you changed the number, the abstract's findings suggest your change is more likely to be one of the small, hopeful ones that cost accuracy.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the playground rewards cutting<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Try both directions on the learned model in the build-along below. A <strong>-15%</strong> override gives WAPE <strong>76.9%</strong>, better than untouched, and bias <strong>-29.7%</strong>. A <strong>+15%</strong> override gives WAPE <strong>79.8%</strong> and bias <strong>-4.9%</strong>. Judged on WAPE alone, cutting wins.</p>
+        <p>That is not Fildes's result showing up in miniature. It is a property of the metric on lumpy demand. When a SKU sells nothing most weeks and a lot in a few, a forecast that sits low is wrong by a little on the many quiet weeks and by a lot on the few big ones, and that trade can lower the total absolute error while starving the shelves. WAPE throws the sign away; bias keeps it.</p>
+        <p>So hold two things side by side and do not force them together. The field study reports that downward adjustments were more likely to help, across 60,000 real forecasts. The playground shows that a downward adjustment can look like help on WAPE while deepening a shortfall that session 2 would turn into missed service. An override rule that watches only WAPE would reward exactly the wrong habit here. That is why section 5 scores bias as well.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers algorithm aversion, appreciation and automation bias</span>
+      <h2>Too little trust or too much: the research disagrees</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">Will Northwick's planners ignore the model or follow it blindly? Two bodies of research give different answers, and <strong>the disagreement is not settled</strong>. One says people abandon an algorithm the moment they see it err. Another says lay people lean on algorithmic advice more than human advice. A third says that once people rely on automation, they miss its mistakes. The override rule has to work whichever way your team leans.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 318" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="One axis of trust in the model. At the low end, algorithm aversion: the planner overrides everything, from Dietvorst, Simmons and Massey 2015. At the high end, automation bias: the planner accepts everything, with omission and commission errors, from Parasuraman and Manzey 2010. In the middle, the design lever: a bounded, logged override, from Dietvorst et al. 2018. Logg, Minson and Moore 2019 are reported to find the reverse lean for lay people.">
+        <defs>
+          <filter id="s5cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="17" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="s5cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s5cH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s5cL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s5cS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s5cT { font: 400 11px Inter, sans-serif; fill: #18200C; }
+          .s5cA { font: 700 11px Inter, sans-serif; fill: #3D5020; }
+          .s5cN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s5cH" x="40" y="28">TWO WAYS TO GET TRUST WRONG, ONE LEVER BETWEEN THEM</text>
+
+        <g filter="url(#s5cSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="50" width="260" height="80" rx="8" transform="rotate(-0.4 170 90)" fill="#FFFFFF"/>
+          <rect x="330" y="50" width="220" height="80" rx="8" transform="rotate(0.4 440 90)" fill="#F2C200"/>
+          <rect x="580" y="50" width="260" height="80" rx="8" transform="rotate(-0.3 710 90)" fill="#FFFFFF"/>
+          <path d="M170 136 L170 158" stroke="#5C7330"/>
+          <path d="M440 136 L440 158" stroke="#5C7330"/>
+          <path d="M710 136 L710 158" stroke="#5C7330"/>
+          <path d="M54 166 L826 166" marker-start="url(#s5cAr)" marker-end="url(#s5cAr)"/>
+        </g>
+
+        <text class="s5cH" x="56" y="76">TOO LITTLE: AVERSION</text>
+        <text class="s5cL" x="56" y="98">Planner overrides everything</text>
+        <text class="s5cS" x="56" y="118">one visible miss and it is ignored</text>
+
+        <text class="s5cH" x="440" y="76" text-anchor="middle">THE DESIGN LEVER</text>
+        <text class="s5cL" x="440" y="98" text-anchor="middle">A bounded, logged override</text>
+        <text class="s5cT" x="440" y="118" text-anchor="middle">capped, coded, scored monthly</text>
+
+        <text class="s5cH" x="596" y="76">TOO MUCH: AUTOMATION BIAS</text>
+        <text class="s5cL" x="596" y="98">Planner accepts everything</text>
+        <text class="s5cS" x="596" y="118">errors pass through unchallenged</text>
+
+        <text class="s5cA" x="54" y="190">less trust in the model</text>
+        <text class="s5cA" x="826" y="190" text-anchor="end">more trust in the model</text>
+
+        <text class="s5cA" x="56" y="218">Dietvorst, Simmons, Massey 2015</text>
+        <text class="s5cS" x="56" y="236">avoided it after seeing it err,</text>
+        <text class="s5cS" x="56" y="252">even when it beat the human</text>
+        <text class="s5cA" x="346" y="218">Dietvorst et al. 2018</text>
+        <text class="s5cS" x="346" y="236">used more if they could modify it,</text>
+        <text class="s5cS" x="346" y="252">even when severely restricted</text>
+        <text class="s5cA" x="596" y="218">Parasuraman and Manzey 2010</text>
+        <text class="s5cS" x="596" y="236">omission and commission errors,</text>
+        <text class="s5cS" x="596" y="252">not prevented by training</text>
+
+        <text class="s5cN" x="40" y="284">Logg, Minson, Moore 2019 are reported to find the reverse: lay people relied more on algorithmic advice.</text>
+        <text class="s5cN" x="40" y="304">Weaker for experts and against their own estimate. Which way your planners lean is a measurement.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the rule does not pick a side; it bounds the override so both failure modes show up in the log</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Four findings that do not agree<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <tr><th>Study</th><th>What it found</th><th>What it predicts at Northwick</th></tr>
+          <tr><td><strong>Dietvorst, Simmons, Massey 2015</strong>, five studies</td><td>After seeing an algorithm err, people were less likely to choose it over an inferior human forecaster, "even among those who saw the algorithm outperform the human". They lost confidence in algorithms faster than in people.</td><td>One bad week on a visible SKU, and planners start overriding everything</td></tr>
+          <tr><td><strong>Logg, Minson, Moore 2019</strong>, reported</td><td>Across six experiments, lay people are reported to have relied more on advice labelled algorithmic than human. The effect weakened for forecasting experts and when the alternative was their own estimate.</td><td>Junior staff may lean on the model; experienced planners, judging against their own number, may not</td></tr>
+          <tr><td><strong>Parasuraman and Manzey 2010</strong></td><td>Automation bias produces both omission and commission errors when decision aids are imperfect. It occurs in naive and expert participants and "cannot be prevented by training or instructions".</td><td>Once the model is trusted, a wrong forecast on a new range sails through review</td></tr>
+          <tr><td><strong>Dietvorst, Simmons, Massey 2018</strong></td><td>People were more likely to use an imperfect algorithm when they could modify its forecasts, "even when participants were severely restricted" in how much.</td><td>A small, bounded override keeps planners using the model</td></tr>
+        </table>
+        <p>Aversion and appreciation point in opposite directions, and the studies differ in who was asked, about what, and against which alternative. Nobody has shown which one describes a professional planning team working with a forecast every week. Do not pick a side on a slide. Design so that either failure would show up in the data.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The design hint sits in the title of Dietvorst et al. 2018: people will use imperfect algorithms if they can "even slightly" modify them. A capped override is not a concession to planners' feelings. It is the cheapest known way to keep them using the model, and the log it produces is how you catch automation bias too: a planner who never overrides anything, on any SKU, for months, is a pattern to look at.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why training alone will not fix it<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The tempting fix for either failure is a workshop: teach planners when to trust the model. Parasuraman and Manzey's review says automation bias cannot be prevented by training or instructions alone. Dietvorst's 2015 participants lost faith in an algorithm they had just watched beat a person. Neither failure is a knowledge gap.</p>
+        <p>What changes behaviour in both bodies of work is the structure of the task: what people are allowed to change, and what they see afterwards. That is why section 5 is written as rules and a monthly score, not as guidance.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Northwick's override rules, scored on 45 real SKUs</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">The same playground as session 1: five forecasters, 45 real products, 26 holdout weeks no method saw. This time the control that matters is the slider, <strong>"Planner override on every forecast"</strong>, from -30% to +30%. You score each step the FVA way, try three overrides, and write section 5 of the playbook from what the numbers show.</p>
+
+    <div id="asc-play"></div>
+
+    <div class="steps">
+      <div class="step"><p><strong>Score the chain, step by step.</strong> With the slider at 0, pick "Naive (last week)": WAPE <strong>90.9%</strong>. Then "8-week average": <strong>79.6%</strong>. Then "Learned model": <strong>77.5%</strong>. Each step beat the one before it, so each has positive FVA. Write the three numbers down; they are the untouched forecasts every override is scored against.</p>
+        <div class="prompt-box good"><span class="label">★ The untouched chain</span>
+naive 90.9%  -&gt;  8-week avg 79.6%  -&gt;  learned 77.5%
+FVA: +11.3 pts, then +2.1 pts (WAPE, lower is better)</div></div>
+      <div class="step"><p><strong>Add the planner's blanket +15%.</strong> Keep "Learned model" and drag the slider to <strong>+15%</strong>. WAPE rises to <strong>79.8%</strong>; bias moves from -17.3% to <strong>-4.9%</strong>. The override corrected a real lean and still has negative FVA on accuracy, because it pushed up every SKU, including the ones that were not short.</p>
+        <div class="prompt-box good"><span class="label">★ Override on a biased forecast</span>
+learned, 0%:    WAPE 77.5%  bias -17.3%
+learned, +15%:  WAPE 79.8%  bias  -4.9%
+FVA on WAPE: -2.3 pts. FVA on bias: closer to zero.</div></div>
+      <div class="step"><p><strong>Same override, unbiased forecast.</strong> Pick "Exponential smoothing" at 0: WAPE <strong>80.2%</strong>, bias <strong>-0.8%</strong>, almost no lean. Now drag to <strong>+15%</strong>: WAPE <strong>85.3%</strong>, bias <strong>+14.1%</strong>. There was no lean to correct, so the override only added error. The same habit is half-useful on one model and pure waste on another.</p>
+        <div class="prompt-box good"><span class="label">★ Override on an unbiased forecast</span>
+smoothing, 0%:    WAPE 80.2%  bias  -0.8%
+smoothing, +15%:  WAPE 85.3%  bias +14.1%
+nothing to correct, so FVA is negative on both</div></div>
+      <div class="step"><p><strong>Try the cut.</strong> Back to "Learned model", drag to <strong>-15%</strong>. WAPE "improves" to <strong>76.9%</strong>, the best number you have seen tonight. Bias falls to <strong>-29.7%</strong>: forecasts now sit almost a third below what sold. A rule scored on WAPE alone would approve this override. Session 2's stock policy would turn it into empty shelves. The rule must watch both.</p>
+        <div class="prompt-box good"><span class="label">★ Why the rule watches two numbers</span>
+learned, -15%:  WAPE 76.9%  (better than 77.5%)
+                bias -29.7% (far worse than -17.3%)
+WAPE alone rewards forecasting low on lumpy demand.</div></div>
+      <div class="step"><p><strong>Write the override rules into the playbook.</strong> Copy this into section 5 of your own version of Northwick's playbook. The rules come from the three studies and the four steps above; the thresholds are yours to set.</p>
+        <div class="prompt-box good"><span class="label">★ Playbook section 5 · override rules</span>
+1. Every override carries a reason code and a size, or it is not entered.
+2. Small adjustments are discouraged: if it is not worth a reason, leave it.
+3. Every override is logged and scored for FVA monthly against the
+   untouched forecast, on WAPE and on bias, never WAPE alone.
+4. Upward overrides need a second sign-off.
+5. A bias the model already shows is corrected at source, in the model's
+   level, never by a blanket override on every forecast.
+6. A reason code that loses value two months running is retired.
+Owner: the demand planning lead.
+Constructed Northwick example on real UCI demand. Your numbers will differ.</div></div>
+    </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Northwick's AI planning playbook as a one-page document with six sections. Sections 1 to 4 are written in earlier sessions; section 5, the override rules, is filled tonight; section 6 is empty. Tonight's section requires a reason code and size, discourages small adjustments, logs and scores every override monthly, needs a second sign-off for upward overrides, fixes known bias at source, and names the demand planning lead as owner.">
+        <defs>
+          <filter id="s5dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="31" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s5dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s5dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s5dH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s5dL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s5dS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s5dA { font: 700 11px Inter, sans-serif; fill: #3D5020; }
+          .s5dN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s5dH" x="40" y="28">NORTHWICK'S AI PLANNING PLAYBOOK</text>
+        <text class="s5dS" x="310" y="28">constructed, one page</text>
+
+        <g filter="url(#s5dSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="40" width="360" height="226" rx="6" transform="rotate(-0.5 220 153)" fill="#FFFFFF"/>
+          <rect x="54" y="52" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#3D5020"/>
+          <rect x="54" y="88" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#3D5020"/>
+          <rect x="54" y="124" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#3D5020"/>
+          <rect x="54" y="160" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#3D5020"/>
+          <rect x="54" y="196" width="332" height="30" rx="4" fill="#F2C200"/>
+          <rect x="54" y="232" width="332" height="26" rx="4" fill="url(#s5dHc)" stroke="#CDD3BF"/>
+          <path d="M392 211 C420 211 420 120 436 120" marker-end="url(#s5dAr)"/>
+          <rect x="444" y="52" width="410" height="206" rx="10" transform="rotate(0.4 649 155)" fill="#F2F5E8"/>
+        </g>
+
+        <text class="s5dL" x="66" y="72">1 · Forecast-error budget</text>
+        <text class="s5dA" x="376" y="72" text-anchor="end">s1</text>
+        <text class="s5dL" x="66" y="108">2 · Stock policy</text>
+        <text class="s5dA" x="376" y="108" text-anchor="end">s2</text>
+        <text class="s5dL" x="66" y="144">3 · Allocation rules</text>
+        <text class="s5dA" x="376" y="144" text-anchor="end">s3</text>
+        <text class="s5dL" x="66" y="180">4 · Disruption playbook</text>
+        <text class="s5dA" x="376" y="180" text-anchor="end">s4</text>
+        <text class="s5dL" x="66" y="216">5 · Override rules</text>
+        <text class="s5dL" x="376" y="216" text-anchor="end">tonight</text>
+        <text class="s5dL" x="66" y="250">6 · Business case</text>
+        <text class="s5dS" x="376" y="250" text-anchor="end">s6</text>
+
+        <text class="s5dH" x="462" y="80">TONIGHT'S SECTION</text>
+        <text class="s5dL" x="462" y="104">Every override: a reason code and a size.</text>
+        <text class="s5dL" x="462" y="126">Small adjustments are discouraged.</text>
+        <text class="s5dL" x="462" y="148">Logged, FVA-scored monthly on WAPE and bias.</text>
+        <text class="s5dL" x="462" y="170">Upward overrides need a second sign-off.</text>
+        <text class="s5dL" x="462" y="192">Known model bias is fixed at source.</text>
+        <text class="s5dL" x="462" y="214">Losing reason codes are retired.</text>
+        <text class="s5dL" x="462" y="240">Owner: the demand planning lead.</text>
+
+        <text class="s5dN" x="40" y="290">Five sections written, one to go. Session 6 prices all five.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - section 5 decides which human changes to the forecast survive the month</figcaption>
+    </figure>
+
+    <div class="tick" data-stages="Reason|Size|Logged|Scored|Kept or cut" data-title="One override, from entry to verdict">
+      <p class="tick-note" data-stage="0"><b>Reason.</b> The planner picks a code: a store refit, a supplier letter, a local event. No code, no override.</p>
+      <p class="tick-note" data-stage="1"><b>Size.</b> The change is entered as a percentage of the model's number. Small ones are discouraged; upward ones go to a second person.</p>
+      <p class="tick-note" data-stage="2"><b>Logged.</b> The untouched forecast is kept next to the overridden one. Without it, there is nothing to score against.</p>
+      <p class="tick-note" data-stage="3"><b>Scored.</b> Next month, both are compared with what sold, on WAPE and on bias: the override's FVA.</p>
+      <p class="tick-note" data-stage="4"><b>Kept or cut.</b> Reason codes that keep adding value stay. Ones that keep losing it are retired, by the demand planning lead.</p>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Why the playground cannot settle tonight's argument.</strong> The slider applies one override to every SKU every week, which no planner does. Real overrides are targeted, and the field study's abstract reports that adjustments improved accuracy on average in three of four companies. What the playground does show cleanly is the mechanism: an override on a biased forecast trades bias for spread, an override on an unbiased one only adds spread, and WAPE alone can reward the wrong direction. Constructed Northwick rules on real UCI demand; your numbers will differ.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 6</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Draw your forecast chain.</strong> List every step between the first statistical number and the number that drives orders: models, planners, meetings, sign-offs. Mark which steps keep a copy of the number they received.</li>
+      <li><strong>Score one step.</strong> For one month and one category, compare the forecast before and after the planners' review with what sold. Compute WAPE and bias for both. Is the review's FVA positive on both, one, or neither?</li>
+      <li><strong>Split by direction.</strong> From the same month, separate upward from downward overrides and large from small. Does your team show the pattern the Fildes et al. abstract reports, or a different one?</li>
+      <li><strong>Draft section 5.</strong> Write your own override rules: reason codes, a size rule, who signs off upward changes, how often FVA is scored, and the owner.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and session 5 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Forecast value added scores each step in the forecast chain. What does it compare each step against?</p>
+      <button class="qopt" type="button">A · Only the final forecast against what actually sold</button>
+      <button class="qopt" type="button">B · The step before it, starting from a naive forecast as the floor</button>
+      <button class="qopt" type="button">C · The accuracy figure in the vendor's contract</button>
+      <p class="qwhy">FVA is the change in a metric attributable to one step or participant. You start from naive and ask whether each later step improved on the one before. On the playground: 90.9% to 79.6% to 77.5%, then a +15% override back up to 79.8%.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · What does the abstract of Fildes et al. 2009 report about upward versus downward adjustments?</p>
+      <button class="qopt" type="button">A · Upward and downward adjustments helped equally often</button>
+      <button class="qopt" type="button">B · Upward adjustments helped more, because planners know about promotions</button>
+      <button class="qopt" type="button">C · Upward adjustments were much less likely to improve accuracy, which the authors read as optimism bias</button>
+      <p class="qwhy">Across more than 60,000 forecasts from four supply-chain companies, the abstract reports that upward adjustments were much less likely to help than downward ones. That is why section 5 puts a second sign-off on upward overrides.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · On the playground, a -15% override on the learned model "improves" WAPE from 77.5% to 76.9%. Why is it still a bad rule?</p>
+      <button class="qopt" type="button">A · Bias falls to -29.7%: forecasts sit far below what sold, so stock set from them runs short</button>
+      <button class="qopt" type="button">B · A 0.6-point improvement is too small to be worth logging</button>
+      <button class="qopt" type="button">C · Downward overrides are always wrong, whatever the data shows</button>
+      <p class="qwhy">WAPE throws the sign away, and on lumpy demand forecasting low can lower it. Bias keeps the sign: -29.7% means a deeper shortfall than the untouched -17.3%. A rule scored on WAPE alone would approve the override that empties shelves.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ OFFICIAL COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Petropoulos et al., "Forecasting: theory and practice" (IJF 2022), FVA section</span><span class="note">FVA definition and "process waste", attributed there to Gilliland 2002. Read in the arXiv PDF, 2012.03854</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Gilliland, The Business Forecasting Deal (Wiley, 2010)</span><span class="note">Reported only; the method is taught through the Petropoulos text, not the book</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Fildes, Goodwin, Lawrence, Nikolopoulos (IJF 2009, 25(1), 3-23)</span><span class="note">Findings from the abstract: 60,000+ forecasts, four companies, size and direction effects. Body text not read; no per-cell rates quoted</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Dietvorst, Simmons, Massey 2015 (JEP: General 144(1))</span><span class="note">Algorithm aversion after seeing an algorithm err. Read in the Wharton PDF</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Dietvorst, Simmons, Massey 2018 (Management Science 64(3))</span><span class="note">More use when people can modify the forecast, even when severely restricted. Read in the abstract</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Logg, Minson, Moore 2019 (OBHDP 151)</span><span class="note">Algorithm appreciation, reported from abstract copies; taught as the other side of the disagreement</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Parasuraman and Manzey 2010 (Human Factors 52(3))</span><span class="note">Automation bias: omission and commission errors, not prevented by training. Read in the abstract</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 5 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>FVA</b><span>Score every step against the one before it. Steps that do not help are process waste.</span></div>
+      <div class="cheat-item"><b>Floor vs bar</b><span>Naive is the floor every step must clear. The best spreadsheet method is the bar AI must beat.</span></div>
+      <div class="cheat-item"><b>Size and direction</b><span>Reported: large changes tended to help, small ones often hurt; upward ones much less likely to help.</span></div>
+      <div class="cheat-item"><b>Two numbers, always</b><span>Score overrides on WAPE and bias. Here -15% "improves" WAPE to 76.9% and drives bias to -29.7%.</span></div>
+      <div class="cheat-item"><b>Trust, unsettled</b><span>Aversion says planners abandon the model; appreciation says lay people lean on it; automation bias says reliance hides errors.</span></div>
+      <div class="cheat-item"><b>The lever</b><span>A bounded, reason-coded, logged override. It keeps the model in use and makes both failures visible.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Five sections of the playbook, and still no price on any of them. Session 6 puts the whole thing on a bench: the vendor's 30 percent cut releases about GBP 1.04 million of stock, and the 2.7 percent cut the bench actually measured loses GBP 196,011 a year once the licence is paid.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Session 5 of 6 · learn-ai-supply-chain-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="04-shocks-and-the-bullwhip.html">← Prev: Shocks and the bullwhip</a> &nbsp;·&nbsp; <a href="06-price-it-on-the-bench.html">Next: The business case: price it on the bench →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/asc-sample.js?v=1"></script>
+<script src="../assets/asc-live.js?v=1"></script>
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

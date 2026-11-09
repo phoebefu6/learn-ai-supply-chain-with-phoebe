@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Session 4 of 6. The bullwhip effect, run live: 104 real weeks of retail demand fed through a three-tier chain of sensible order-up-to rules, the four causes Lee, Padmanabhan and Whang named, and what sharing sell-through does to the swing.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Shocks and the bullwhip - learn ai supply chain with phoebe">
+<meta property="og:description" content="Session 4 of 6. Customers barely moved. The supplier saw 87.6 times the swing. Sharing sell-through brought it to 16.5.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/courses/04-shocks-and-the-bullwhip.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Shocks and the bullwhip - learn ai supply chain with phoebe">
+<meta name="twitter:description" content="Session 4 of 6. Nobody in the chain did anything wrong. Each tier followed a sensible rule, and the swing grew 87 times.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Session 4 · Shocks and the bullwhip - learn ai supply chain with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-supply-chain-with-phoebe</a> / Session 4 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI + Supply Chain with Phoebe · Session 4 of 6</div>
+    <h1>Shocks and <span class="accent">the bullwhip</span></h1>
+    <p class="sub">A small wobble in what customers buy becomes a lurch at the store, a swing at the distribution centre and a crisis at the supplier. Tonight you feed 104 real weeks of retail demand into a three-tier chain where every tier follows a sensible rule, watch the swing grow, and find which levers shrink it. You leave with section 4 of Northwick's playbook: the disruption rules, starting with what Northwick shares.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Hands-on</span>
+      <span class="chip audience">Ops and planning leads being sold an AI tool</span>
+      <span class="chip audience">Planners and analysts who will run it</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:3">0-3 · Welcome</span>
+      <span class="a2" style="flex:17">3-20 · Four causes, one cure, one claim</span>
+      <span class="a3" style="flex:22">20-42 · Build-along: the bullwhip lever</span>
+      <span class="a4" style="flex:3">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where the swing comes from</h2>
+    </div>
+    <p class="lede">Sessions 1 to 3 planned one tier: Northwick's own stores and online shop. Real chains have more. Northwick's stores order from its two distribution centres, the centres order from suppliers, and the suppliers order from factories. Each tier sees only the orders of the tier below, and that is enough to turn a wobble into a whip.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">Constructed Northwick example = invented, labelled every time</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The four causes of the bullwhip in the words of the paper that named them, a live chain you can break and repair yourself on real demand, and an honest way to read "control tower" and "disruption sensing" pitches. Then section 4 of Northwick's playbook: what it shares, how often it orders, and which lever it pulls before buying anything.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why this belongs in an AI planning playbook<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every AI planning tool forecasts something. The bullwhip decides <strong>what it is forecasting</strong>. A DC model trained on the orders stores send it is learning the stores' ordering habits, not customer demand. A better model of the wrong signal is still a model of the wrong signal.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Lee, Padmanabhan and Whang open their 1997 Management Science paper with a consumer goods case: Procter &amp; Gamble "found that the diaper orders issued by the distributors have a degree of variability" far above what babies, a famously steady source of demand, could explain. Retail sales were steady; the orders upstream swung.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the bullwhip effect and its four causes</span>
+      <h2>Every tier is rational and the chain is not</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">The bullwhip effect is the growth in order variability as you move up a supply chain, away from the customer. Nobody has to make a mistake for it to happen. Each tier forecasts from the orders it receives, adds a safety buffer, and orders the difference. Each step is textbook practice. Stacked, they amplify.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A four-tier chain from customers to supplier, run on 104 real weeks. Customer demand is the baseline at 1 times. The stores' orders vary 4.0 times as much, the distribution centre's 18.2 times, and the supplier's orders 87.6 times as much as customer demand, in the base case of the bullwhip lever.">
+        <defs>
+          <filter id="s4aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="s4aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s4aH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s4aL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s4aS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s4aI { font: 400 11px Inter, sans-serif; fill: #18200C; }
+          .s4aV { font: 800 20px Inter, sans-serif; fill: #26330F; }
+          .s4aN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s4aH" x="40" y="28">ORDERS FLOW UP THE CHAIN, AND THE SWING GROWS</text>
+        <text class="s4aS" x="420" y="28">bullwhip lever, base case, 104 real weeks</text>
+
+        <g filter="url(#s4aSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="56" width="160" height="58" rx="8" transform="rotate(-0.6 120 85)" fill="#FFFFFF"/>
+          <rect x="250" y="56" width="160" height="58" rx="8" transform="rotate(0.5 330 85)" fill="#F2F5E8"/>
+          <rect x="460" y="56" width="160" height="58" rx="8" transform="rotate(-0.4 540 85)" fill="#F2F5E8"/>
+          <rect x="670" y="56" width="170" height="58" rx="8" transform="rotate(0.5 755 85)" fill="#F2C200"/>
+          <path d="M204 85 L244 85" marker-end="url(#s4aAr)"/>
+          <path d="M414 85 L454 85" marker-end="url(#s4aAr)"/>
+          <path d="M624 85 L664 85" marker-end="url(#s4aAr)"/>
+          <path d="M50 200 q 17.5 -6 35 0 t 35 0 t 35 0 t 35 0" stroke="#3D5020"/>
+          <path d="M260 200 q 17.5 -14 35 0 t 35 0 t 35 0 t 35 0" stroke="#3D5020"/>
+          <path d="M470 200 q 17.5 -28 35 0 t 35 0 t 35 0 t 35 0" stroke="#3D5020"/>
+          <path d="M680 200 q 18.75 -46 37.5 0 t 37.5 0 t 37.5 0 t 37.5 0" stroke="#5E4500" stroke-width="2.6"/>
+        </g>
+
+        <text class="s4aL" x="56" y="82">Customers</text>
+        <text class="s4aS" x="56" y="100">what they buy</text>
+        <text class="s4aL" x="266" y="82">Stores</text>
+        <text class="s4aS" x="266" y="100">order from the DC</text>
+        <text class="s4aL" x="476" y="82">DC</text>
+        <text class="s4aS" x="476" y="100">orders from supplier</text>
+        <text class="s4aL" x="686" y="82">Supplier</text>
+        <text class="s4aI" x="686" y="100">orders from factory</text>
+
+        <text class="s4aV" x="120" y="270" text-anchor="middle">1x</text>
+        <text class="s4aV" x="330" y="270" text-anchor="middle">4.0x</text>
+        <text class="s4aV" x="540" y="270" text-anchor="middle">18.2x</text>
+        <text class="s4aV" x="755" y="270" text-anchor="middle">87.6x</text>
+
+        <text class="s4aN" x="40" y="306">Variance of each tier's orders over variance of customer demand. All 45 real SKUs summed, weeks 13 to 103.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - customers barely move; by the third tier the orders swing 87.6 times as much</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Four causes, each a sensible local rule<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Lee, Padmanabhan and Whang's Management Science paper names "four sources of the bullwhip effect: demand signal processing, rationing game, order batching, and price variations". In planner's language:</p>
+        <table class="clean">
+          <tr><th>Cause</th><th>The local rule</th><th>Where it shows on the lever</th></tr>
+          <tr><td><strong>Demand signal processing</strong></td><td>Forecast from the orders you receive and reset your target level each week</td><td>"React to 4 weeks": a shorter view chases every wobble</td></tr>
+          <tr><td><strong>Rationing game</strong></td><td>In a shortage, order more than you need because you expect to be rationed</td><td>Session 3's phantom demand</td></tr>
+          <tr><td><strong>Order batching</strong></td><td>Order once a month to fill a truck or save admin</td><td>"Stores order monthly"</td></tr>
+          <tr><td><strong>Price variations</strong></td><td>Buy ahead when the price is low, stop when it is high</td><td>Not on the lever; see below</td></tr>
+        </table>
+        <div class="callout tip">
+          <p><strong>The one-line test.</strong> Ask of any order stream an AI tool will learn from: is it customer demand, or someone's reaction to it? If it is a reaction, the model inherits the reaction.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Promotions: the cause a forecaster can see coming<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A supplier's price promotion makes the retailer buy weeks of stock at once, then nothing. Customer demand has not moved; orders have. Inside a retailer, a promotion also moves real customer demand, and how much a price cut moves it is an estimation problem with its own discipline: <a href="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/p1-demand-from-data.html">Economics: demand from data ↗</a>. For the playbook, the rule is simpler: a promotion is a known event, so it belongs in the forecast as an input, not in the error as a surprise.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers information sharing as the cure</span>
+      <h2>Share what customers bought, not what the tier below ordered</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">If every tier forecasts from the same customer signal, the amplification has much less to feed on. The paper's counteracting actions start with "information sharing of sell-through and inventory status data". The bench shows how much that is worth on real demand, and what it does not fix.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The same three-tier chain wired two ways. Top: each tier sees only the orders of the tier below; order variance ratios 4.0, 18.2 and 87.6 times customer demand. Bottom: every tier forecasts from shared customer sell-through; ratios 4.0, 9.2 and 16.5. With a 13-week view as well: 2.8, 5.6 and 9.3.">
+        <defs>
+          <filter id="s4bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="s4bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+          <marker id="s4bAo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#3D5020" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s4bH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s4bL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s4bS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s4bV { font: 800 16px Inter, sans-serif; fill: #26330F; }
+          .s4bB { font: 800 16px Inter, sans-serif; fill: #5E4500; }
+          .s4bN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s4bH" x="40" y="28">EACH TIER SEES ONLY THE ORDERS BELOW IT</text>
+
+        <g filter="url(#s4bSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="44" width="130" height="44" rx="8" transform="rotate(-0.5 105 66)" fill="#FFFFFF"/>
+          <rect x="230" y="44" width="130" height="44" rx="8" transform="rotate(0.4 295 66)" fill="#F2F5E8"/>
+          <rect x="430" y="44" width="130" height="44" rx="8" transform="rotate(-0.4 495 66)" fill="#F2F5E8"/>
+          <rect x="630" y="44" width="130" height="44" rx="8" transform="rotate(0.4 695 66)" fill="#F2F5E8"/>
+          <path d="M174 66 L224 66" marker-end="url(#s4bAr)"/>
+          <path d="M364 66 L424 66" marker-end="url(#s4bAr)"/>
+          <path d="M564 66 L624 66" marker-end="url(#s4bAr)"/>
+
+          <rect x="40" y="204" width="130" height="44" rx="8" transform="rotate(0.5 105 226)" fill="#FFFFFF"/>
+          <rect x="230" y="204" width="130" height="44" rx="8" transform="rotate(-0.4 295 226)" fill="#F2F5E8"/>
+          <rect x="430" y="204" width="130" height="44" rx="8" transform="rotate(0.4 495 226)" fill="#F2F5E8"/>
+          <rect x="630" y="204" width="130" height="44" rx="8" transform="rotate(-0.4 695 226)" fill="#F2C200"/>
+          <path d="M174 226 L224 226" marker-end="url(#s4bAr)"/>
+          <path d="M364 226 L424 226" marker-end="url(#s4bAr)"/>
+          <path d="M564 226 L624 226" marker-end="url(#s4bAr)"/>
+          <path d="M105 200 L105 180 L695 180" stroke="#3D5020" stroke-dasharray="6 5"/>
+          <path d="M295 180 L295 198" stroke="#3D5020" marker-end="url(#s4bAo)"/>
+          <path d="M495 180 L495 198" stroke="#3D5020" marker-end="url(#s4bAo)"/>
+          <path d="M695 180 L695 198" stroke="#3D5020" marker-end="url(#s4bAo)"/>
+        </g>
+
+        <text class="s4bL" x="105" y="70" text-anchor="middle">Customers</text>
+        <text class="s4bL" x="295" y="70" text-anchor="middle">Stores</text>
+        <text class="s4bL" x="495" y="70" text-anchor="middle">DC</text>
+        <text class="s4bL" x="695" y="70" text-anchor="middle">Supplier</text>
+        <text class="s4bS" x="105" y="112" text-anchor="middle">1x</text>
+        <text class="s4bV" x="295" y="114" text-anchor="middle">4.0x</text>
+        <text class="s4bV" x="495" y="114" text-anchor="middle">18.2x</text>
+        <text class="s4bV" x="695" y="114" text-anchor="middle">87.6x</text>
+
+        <text class="s4bH" x="40" y="160">EVERY TIER FORECASTS FROM SHARED SELL-THROUGH</text>
+        <text class="s4bL" x="105" y="230" text-anchor="middle">Customers</text>
+        <text class="s4bL" x="295" y="230" text-anchor="middle">Stores</text>
+        <text class="s4bL" x="495" y="230" text-anchor="middle">DC</text>
+        <text class="s4bL" x="695" y="230" text-anchor="middle">Supplier</text>
+        <text class="s4bS" x="105" y="272" text-anchor="middle">1x</text>
+        <text class="s4bV" x="295" y="274" text-anchor="middle">4.0x</text>
+        <text class="s4bV" x="495" y="274" text-anchor="middle">9.2x</text>
+        <text class="s4bB" x="695" y="274" text-anchor="middle">16.5x</text>
+
+        <text class="s4bN" x="40" y="306">Add a 13-week forecasting view and the three ratios fall to 2.8x, 5.6x and 9.3x.</text>
+        <text class="s4bN" x="40" y="328">The stores already saw customers, so sharing changes nothing at the first tier.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the dashed feed is the cure: same demand, same rules, the supplier's swing falls from 87.6x to 16.5x</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What sharing fixes, and what it cannot<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>It fixes the signal.</strong> Upstream tiers stop forecasting the downstream tier's reactions. On the lever, the DC drops from 18.2x to 9.2x and the supplier from 87.6x to 16.5x.</li>
+          <li><strong>It does not remove the policy.</strong> Every tier still resets a target level each week and still orders the difference, so some amplification stays. 16.5x is still a lot.</li>
+          <li><strong>It does not shorten lead times.</strong> A longer lead time means a bigger target level to reset, and every change in the forecast moves it further. That lever is in Part 3.</li>
+        </ul>
+        <p>Sharing is cheap to describe and hard to do: it needs a data feed both companies trust, agreed definitions, and a reason for the supplier to believe the retailer's numbers. That is a contract and a relationship, not a model.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the two 1997 papers say, and what we could read<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The same authors published twice in 1997: the Management Science paper with the formal model, read in full for every quote on this page, and a shorter Sloan Management Review article, "The Bullwhip Effect in Supply Chains", written for managers. The SMR text could not be read at source here. Secondary summaries report that it groups the remedies into themes, but those labels are not quoted on this page until someone reads the original.</p>
+        <p>The managerial point survives either way: the causes are structural, so the remedies are structural too. Better forecasting at one tier helps that tier; it does not stop the tier above from forecasting your orders.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers disruption sensing and control-tower claims</span>
+      <h2>"Control tower" claims: test what they shorten</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Every major planning vendor now sells disruption sensing: an AI that reads news, weather, port data and supplier signals, and a "control tower" that shows it all on one screen. There is no independent public evaluation of these claims that could be read for this session. Treat them as contested, and ask the one question you can test: which delay does it shorten?</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The life of a supply shock on a timeline: the shock happens, it is seen in data after a detection delay, a decision follows after a decision delay, the order is placed, and stock arrives after the lead time. Sensing tools can shorten the first two delays. The lead time is the delay the bullwhip lever shows is most expensive.">
+        <defs>
+          <filter id="s4cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="47" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="s4cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s4cH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s4cL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s4cS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s4cN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s4cH" x="40" y="28">ONE SHOCK, THREE DELAYS</text>
+
+        <g filter="url(#s4cSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M60 100 L830 100" marker-end="url(#s4cAr)"/>
+          <circle cx="90" cy="100" r="7" fill="#26330F"/>
+          <circle cx="260" cy="100" r="7" fill="#FFFFFF"/>
+          <circle cx="430" cy="100" r="7" fill="#FFFFFF"/>
+          <circle cx="600" cy="100" r="7" fill="#FFFFFF"/>
+          <circle cx="780" cy="100" r="7" fill="#26330F"/>
+          <rect x="96" y="128" width="158" height="40" rx="8" transform="rotate(-0.5 175 148)" fill="#F2F5E8"/>
+          <rect x="266" y="128" width="158" height="40" rx="8" transform="rotate(0.5 345 148)" fill="#F2F5E8"/>
+          <rect x="606" y="128" width="168" height="40" rx="8" transform="rotate(-0.5 690 148)" fill="#F2C200"/>
+        </g>
+
+        <text class="s4cL" x="90" y="80" text-anchor="middle">Shock</text>
+        <text class="s4cL" x="260" y="80" text-anchor="middle">Seen in data</text>
+        <text class="s4cL" x="430" y="80" text-anchor="middle">Decided</text>
+        <text class="s4cL" x="600" y="80" text-anchor="middle">Ordered</text>
+        <text class="s4cL" x="780" y="80" text-anchor="middle">Arrives</text>
+        <text class="s4cL" x="175" y="153" text-anchor="middle">detection delay</text>
+        <text class="s4cL" x="345" y="153" text-anchor="middle">decision delay</text>
+        <text class="s4cL" x="690" y="153" text-anchor="middle">lead time L</text>
+        <text class="s4cS" x="260" y="190" text-anchor="middle">what sensing tools claim to cut</text>
+        <text class="s4cS" x="690" y="190" text-anchor="middle">what the lever prices</text>
+
+        <text class="s4cN" x="40" y="230">On the bench, lead time 2 to 4 weeks lifts the supplier's swing from 87.6x to 289.6x.</text>
+        <text class="s4cN" x="40" y="252">Ask any sensing tool which of the three boxes it shortens, and by how many days, on your data.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - sensing tools work on the first two boxes; the yellow one is usually the most expensive</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Four questions for a control-tower demo<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ol>
+          <li><strong>Which delay, by how much?</strong> Detection, decision or lead time, in days, measured on a past disruption of ours.</li>
+          <li><strong>What does it share?</strong> If it shows our suppliers our sell-through, it attacks the bullwhip. If it shows us their news feed, it attacks detection only.</li>
+          <li><strong>Who acts on the alert?</strong> A signal nobody owns is a dashboard. Name the role and the decision it triggers.</li>
+          <li><strong>What did it miss?</strong> Ask for the false alarms and the misses from a past period, not the highlight reel.</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the evidence is thin, and how to hold it<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Disruption sensing is hard to evaluate in public: disruptions are rare, each is different, and a vendor's case study picks the event it caught. The honest position is that the category is contested. Some teams report faster responses; nobody has published the misses alongside the catches in a form that could be read here. Run your own back-test on two or three past disruptions before you sign, and write the result down whichever way it goes.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The lever's "Lead time 4 weeks" rung is the cheapest experiment on this page. Doubling the lead time from 2 to 4 weeks lifts the DC from 18.2x to 40.1x and the supplier to 289.6x. Shortening a supplier's lead time is a negotiation, not an algorithm, and on this chain it is worth more than any forecast improvement.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Break the chain, then repair it</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">The lever runs an order-up-to policy at three tiers, fed the real weekly demand of the 45 SKUs from session 1, summed. Each tier averages the last few weeks of what it sees, sets a target level for its lead time plus a 1.65 x spread buffer, and orders the change. Every number is computed in your browser. Northwick's chain is modelled with these rules; its real policy is constructed.</p>
+
+    <div id="asc-bw"></div>
+
+    <div class="steps">
+      <div class="step"><p><strong>Read the base case.</strong> The lever opens on "Base case": an 8-week view, lead time 2 weeks, weekly orders. The three meters read <strong>4.0x, 18.2x, 87.6x</strong>. In the chart, customer demand (solid) is the calmest line on the screen.</p>
+        <div class="prompt-box good"><span class="label">★ Base case</span>
+stores 4.0x   DC 18.2x   supplier 87.6x
+variance of orders / variance of customer demand</div></div>
+      <div class="step"><p><strong>Make every tier jumpier.</strong> Click "React to 4 weeks". Each tier now resets its target from only four weeks of history, so it chases every wobble: <strong>6.6x, 50.4x, 411.7x</strong>. This is demand signal processing, and it is what a forecasting model that over-reacts to recent weeks does to the chain.</p></div>
+      <div class="step"><p><strong>Slow the trucks.</strong> Click "Lead time 4 weeks": <strong>6.0x, 40.1x, 289.6x</strong>. Nothing about the forecast changed. The longer the lead time, the bigger the target level, and the further each forecast change moves it.</p></div>
+      <div class="step"><p><strong>Batch the orders.</strong> Click "Stores order monthly": the stores now order every 4 weeks. The stores' own ratio jumps to <strong>9.2x</strong>, and the DC to 23.5x. The supplier, at 90.0x, was already swinging. Batching hurts most at the tier that batches.</p></div>
+      <div class="step"><p><strong>Share sell-through.</strong> Click "Share sell-through data": every tier now forecasts from what customers bought. <strong>4.0x, 9.2x, 16.5x</strong>. Then "Share data + 13-week view": <strong>2.8x, 5.6x, 9.3x</strong>. Same demand, same lead time, a supplier swing cut by about nine tenths.</p>
+        <div class="prompt-box good"><span class="label">★ The repair</span>
+share sell-through:          4.0x   9.2x   16.5x
+share + 13-week view:        2.8x   5.6x    9.3x
+(base was                    4.0x  18.2x   87.6x)</div></div>
+      <div class="step"><p><strong>Try one real SKU.</strong> Pick a single product in the series menu, for example a CZ item. One lumpy SKU swings far more than 45 summed, which is why disruption rules belong at the level a planner actually orders. Then go back to "All 45 SKUs together".</p></div>
+      <div class="step"><p><strong>Write the disruption playbook.</strong> Copy this into section 4 of your own version of Northwick's playbook.</p>
+        <div class="prompt-box good"><span class="label">★ Playbook section 4 · the disruption playbook</span>
+We share weekly sell-through and stock with DC North, DC South and
+our top suppliers, on one agreed definition.
+Every tier forecasts from customer demand, never from orders alone.
+Stores order weekly; no month-end batching to fill a truck.
+In a shortage we allocate on sell-through (session 3), so nobody
+gains by over-ordering.
+Lead time is a lever: we negotiate it before we buy sensing tools.
+Any sensing tool states which delay it cuts, in days, on our past
+disruptions, misses included.
+Owner: the supply chain lead.
+Constructed Northwick example on real UCI demand. Yours will differ.</div></div>
+    </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Northwick's AI planning playbook with six sections. Sections 1 to 3 are done, section 4, the disruption playbook, is written tonight, and sections 5 and 6 are still to come. Tonight's section: share sell-through, forecast from customers at every tier, order weekly, allocate on sell-through, treat lead time as a lever, and test sensing tools on past disruptions.">
+        <defs>
+          <filter id="s4dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="49" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s4dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s4dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s4dH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s4dL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s4dS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s4dA { font: 700 11px Inter, sans-serif; fill: #3D5020; }
+          .s4dN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s4dH" x="40" y="28">NORTHWICK'S AI PLANNING PLAYBOOK</text>
+        <text class="s4dS" x="310" y="28">constructed, one page</text>
+
+        <g filter="url(#s4dSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="40" width="360" height="226" rx="6" transform="rotate(-0.5 220 153)" fill="#FFFFFF"/>
+          <rect x="54" y="52" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#CDD3BF"/>
+          <rect x="54" y="88" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#CDD3BF"/>
+          <rect x="54" y="124" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#CDD3BF"/>
+          <rect x="54" y="160" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#3D5020"/>
+          <rect x="54" y="196" width="332" height="30" rx="4" fill="url(#s4dHc)" stroke="#CDD3BF"/>
+          <rect x="54" y="232" width="332" height="26" rx="4" fill="url(#s4dHc)" stroke="#CDD3BF"/>
+          <path d="M392 175 C420 175 420 120 436 120" marker-end="url(#s4dAr)"/>
+          <rect x="444" y="52" width="410" height="206" rx="10" transform="rotate(0.4 649 155)" fill="#F2F5E8"/>
+        </g>
+
+        <text class="s4dL" x="66" y="72">1 · Forecast-error budget</text>
+        <text class="s4dS" x="376" y="72" text-anchor="end">done</text>
+        <text class="s4dL" x="66" y="108">2 · Stock policy</text>
+        <text class="s4dS" x="376" y="108" text-anchor="end">done</text>
+        <text class="s4dL" x="66" y="144">3 · Allocation rules</text>
+        <text class="s4dS" x="376" y="144" text-anchor="end">done</text>
+        <text class="s4dL" x="66" y="180">4 · Disruption playbook</text>
+        <text class="s4dA" x="376" y="180" text-anchor="end">tonight</text>
+        <text class="s4dL" x="66" y="216">5 · Override rules</text>
+        <text class="s4dS" x="376" y="216" text-anchor="end">s5</text>
+        <text class="s4dL" x="66" y="250">6 · Business case</text>
+        <text class="s4dS" x="376" y="250" text-anchor="end">s6</text>
+
+        <text class="s4dH" x="462" y="80">TONIGHT'S SECTION</text>
+        <text class="s4dL" x="462" y="106">Share sell-through, weekly, one definition.</text>
+        <text class="s4dL" x="462" y="130">Every tier forecasts from customers.</text>
+        <text class="s4dL" x="462" y="154">Order weekly: no month-end batching.</text>
+        <text class="s4dL" x="462" y="178">Allocate on sell-through in a shortage.</text>
+        <text class="s4dL" x="462" y="202">Lead time first, sensing tools second.</text>
+        <text class="s4dL" x="462" y="236">Owner: the supply chain lead.</text>
+
+        <text class="s4dN" x="40" y="290">Four sections down. Session 5 decides when a person may change the number.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - section 4 is mostly about what Northwick shares, not what it predicts</figcaption>
+    </figure>
+
+    <div class="callout tip">
+      <p><strong>Why the supplier's ratio is so large.</strong> The model forbids negative orders, so when a tier's target falls it simply stops ordering, then catches up in a lump. Real chains have the same floor. The absolute size depends on the policy you choose; the ranking of the levers is what transfers.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 5</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Measure your own whip.</strong> For one product family, compare the weekly variance of what customers bought with the variance of what you ordered from your supplier over the same weeks. The ratio is your bullwhip at one tier.</li>
+      <li><strong>Find the signal your tools learn from.</strong> For each forecast your team or a vendor runs, write down whether it is trained on customer demand or on orders received.</li>
+      <li><strong>List what you share.</strong> Which suppliers see your sell-through, how often, and on whose definition? Note one supplier where sharing would matter most.</li>
+      <li><strong>Draft section 4.</strong> Write your own disruption playbook in the lines of tonight's section, with a named owner.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and session 4 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · On the lever's base case, the supplier's orders vary 87.6 times as much as customer demand. Who made a mistake?</p>
+      <button class="qopt" type="button">A · The stores, because they ordered more than customers bought</button>
+      <button class="qopt" type="button">B · The supplier, because its forecasting model is poor</button>
+      <button class="qopt" type="button">C · Nobody: each tier followed a sensible order-up-to rule on the orders it could see</button>
+      <p class="qwhy">Every tier forecasts what it sees, adds a buffer and orders the difference. Each step is standard practice. The amplification comes from stacking them on a signal that is already a reaction.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · Sharing customer sell-through with every tier cuts the supplier's ratio from 87.6x to 16.5x. Why does the stores' ratio stay at 4.0x?</p>
+      <button class="qopt" type="button">A · The stores already forecast from customer demand, so sharing gives them nothing new</button>
+      <button class="qopt" type="button">B · The stores refuse to use shared data</button>
+      <button class="qopt" type="button">C · Sharing only works above a lead time of 4 weeks</button>
+      <p class="qwhy">The first tier is fed by customers directly. Sharing changes what the DC and the supplier forecast from; their ratios fall from 18.2x to 9.2x and from 87.6x to 16.5x.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">3 · A vendor demos a control tower that reads news and port data. Which question tests its claim best?</p>
+      <button class="qopt" type="button">A · How many data sources does it connect to?</button>
+      <button class="qopt" type="button">B · Which delay does it shorten, by how many days, on our past disruptions, including the ones it missed?</button>
+      <button class="qopt" type="button">C · Does it use the latest AI model?</button>
+      <p class="qwhy">Sensing tools work on detection and decision delays. The claim is testable only as days saved on your own events, with the misses counted. No public evaluation of the category could be read, so your back-test is the evidence.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ OFFICIAL COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Lee, Padmanabhan, Whang 1997, Management Science 43(4)</span><span class="note">Four sources of the bullwhip; information sharing of sell-through; the P&amp;G diaper orders. Full PDF read</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Lee, Padmanabhan, Whang 1997, Sloan Management Review 38(3)</span><span class="note">Not readable at source; its remedy labels are not quoted</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">UCI Online Retail II (Chen, 2012)</span><span class="note">104 real weeks of 45 SKUs, summed, feed the lever. CC BY 4.0</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Order-up-to policy and the bullwhip ratio</span><span class="note">Computed in the browser and by a Python reference that agrees value by value</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Disruption sensing and control towers</span><span class="note">Vendor claims, no independent evaluation read: taught as contested, with a test</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Promotions as demand drivers</span><span class="note">Linked, not retaught: Economics p1 owns demand estimation</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 4 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Bullwhip</b><span>Order variance grows up the chain. Base case: 4.0x, 18.2x, 87.6x.</span></div>
+      <div class="cheat-item"><b>Four causes</b><span>Signal processing, rationing game, order batching, price variations.</span></div>
+      <div class="cheat-item"><b>The cure</b><span>Share sell-through: every tier forecasts from customers. Supplier 87.6x to 16.5x.</span></div>
+      <div class="cheat-item"><b>Lead time</b><span>2 to 4 weeks lifts the supplier to 289.6x. Negotiate it first.</span></div>
+      <div class="cheat-item"><b>Batching</b><span>Monthly store orders lift the stores' own ratio from 4.0x to 9.2x.</span></div>
+      <div class="cheat-item"><b>Control towers</b><span>Ask which delay, by how many days, on your own past disruptions.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>The chain can be calmed by sharing. Session 5 is about the person in the middle of it: when a planner should change the forecast, why a blanket +15 percent made the learned model worse in session 1, and the rules that let people overrule a model without quietly wrecking it.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Session 4 of 6 · learn-ai-supply-chain-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="03-allocate-scarce-stock.html">← Prev: Allocate scarce stock: rules before optimisers</a> &nbsp;·&nbsp; <a href="05-when-the-planner-is-right.html">Next: When the planner is right: overrides and trust →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/asc-sample.js?v=1"></script>
+<script src="../assets/asc-live.js?v=1"></script>
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

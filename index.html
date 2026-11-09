@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Six sessions on AI in supply chain planning for ops and planning leads and the planners who will run the tool. Every forecast is wrong; the question is what it costs. Run five forecasters on 45 real SKUs in your browser, turn the error into stock, allocation and override rules, calm a real bullwhip, and price an AI planning tool on one live bench. Free, by Phoebe Fu.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Learn AI + Supply Chain with Phoebe">
+<meta property="og:description" content="Every forecast is wrong; the question is what it costs. Turn real demand error into stock, allocation and reroute rules, and price an AI planning tool on one live bench.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/assets/og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Learn AI + Supply Chain with Phoebe">
+<meta name="twitter:description" content="The vendor says 30 percent better. On 45 real SKUs the measured cut was 2.7. Six sessions on what each number is worth.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Learn AI + Supply Chain with Phoebe</title>
+<link rel="stylesheet" href="assets/style.css?v=1">
+<style>
+
+  .stats-row { display: flex; gap: 2.4rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .stat b { display: block; font-size: 2.1rem; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: .72rem; opacity: 1; text-transform: uppercase; letter-spacing: .09em; font-weight: 600; }
+
+  .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .course-card {
+    border: 1px solid var(--hairline);
+    border-top: 4px solid var(--diff, var(--indigo));
+    border-radius: var(--radius);
+    padding: 1.2rem 1.3rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: #fff;
+    transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
+    position: relative;
+  }
+  .course-card:hover { border-color: var(--indigo-soft); border-top-color: var(--diff, var(--indigo)); box-shadow: 0 8px 28px rgba(61,80,32,.14); transform: translateY(-3px); }
+  .course-card .cicon { font-size: 1.7rem; line-height: 1; }
+  .course-card .cnum { font-size: .72rem; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: .1em; }
+  .course-card h3 { font-size: 1.05rem; font-weight: 800; line-height: 1.3; }
+  .course-card p { font-size: .85rem; color: var(--muted); flex: 1; }
+  .course-card .meta { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+  .diff-legend { display: flex; gap: 1rem; margin-top: 1.6rem; font-size: .74rem; color: var(--muted); font-weight: 600; flex-wrap: wrap; }
+  .diff-legend i { display: inline-block; width: .85rem; height: .35rem; border-radius: 999px; margin-right: .35rem; vertical-align: middle; }
+
+  .paths { margin-top: 2.6rem; }
+  .paths h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
+  .paths .plede { color: var(--muted); font-size: .92rem; margin-bottom: .8rem; }
+  .path { display: flex; gap: .55rem; align-items: center; padding: .75rem 0; border-bottom: .5px solid var(--hairline); flex-wrap: wrap; }
+  .path:last-child { border-bottom: none; }
+  .path b { min-width: 15.5rem; font-size: .9rem; }
+  .path .pstep { background: var(--indigo-50); color: var(--indigo-deep); border-radius: 999px; padding: .16rem .68rem; font-weight: 700; font-size: .8rem; text-decoration: none; transition: all .12s ease; }
+  .path .pstep:hover { background: var(--indigo); color: #fff; }
+  .path .parr { color: var(--muted); font-weight: 700; }
+
+  .mm-section { margin-top: 1.6rem; }
+  .mm-section h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .2rem; }
+  .mm-section .mm-lede { color: var(--muted); font-size: .92rem; margin-bottom: .4rem; }
+  .mm-wrap { border: 1px solid var(--hairline); border-radius: var(--radius); background: linear-gradient(180deg,#fff,var(--paper)); padding: .6rem; overflow-x: auto; }
+  .mm-svg { width: 100%; height: auto; display: block; max-width: 60rem; margin: 0 auto; min-width: 34rem; }
+  .mm-link { cursor: pointer; text-decoration: none; }
+  .mm-node rect { transition: opacity .15s ease, filter .15s ease; }
+  .mm-node text { pointer-events: none; }
+  .mm-link:hover .mm-node rect { filter: brightness(1.06); }
+  .mm-edge { transition: opacity .15s ease; }
+
+  .hero-art { margin: 1.8rem 0 0; border-radius: var(--radius); overflow: hidden; background: #fff; border: 1px solid rgba(255,255,255,.55); }
+  .hero-art img { display: block; width: 100%; height: auto; }
+  .hero-art figcaption { padding: 1rem 1.3rem; background: #fff; color: var(--ink); font-size: .86rem; line-height: 1.65; }
+  .hero-art figcaption b { color: var(--indigo-deep); }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn with Phoebe · Applied AI</div>
+    <h1>Learn AI + <span class="accent">Supply Chain</span> with Phoebe</h1>
+    <p class="sub">Six sessions, 45 minutes each, for ops, supply chain and planning leads being sold an AI forecasting or planning tool, and for the planners and analysts who will run it. One question runs through all six: the vendor says the forecast is 30 percent better, so how much stock, service and cash does that actually move, and where does a spreadsheet still win? You run five forecasters on 45 real retail SKUs in your browser, turn the error into stock and allocation rules, watch a real bullwhip grow and shrink, and price the tool on a live bench. No code, no vendor account.</p>
+    <div class="stats-row">
+      <div class="stat"><b data-count="6">6</b><span>sessions</span></div>
+      <div class="stat"><b data-count="45">45</b><span>real SKUs, 104 real weeks</span></div>
+      <div class="stat"><b>2.7%</b><span>measured cut, of a 30% claim</span></div>
+      <div class="stat"><b>87.6x</b><span>the supplier's swing</span></div>
+      <div class="stat"><b data-count="45">45</b><span>min per session</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>The six sessions 🚚 <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· one planning playbook, built across all of them</span></h2>
+      <p class="plede">Bring a real planning question if you have one: a vendor proposal, a forecast you run, a stock policy you inherited. Every session adds one section to Northwick's AI planning playbook (a constructed homeware retailer), and you can write yours beside it.</p>
+    </div>
+
+    <div class="course-grid">
+      <a class="course-card" href="courses/01-every-forecast-is-wrong.html" style="--diff:#34D399">
+        <span class="cicon">🎯</span>
+        <span class="cnum">Session 1 · easy</span>
+        <h3>Every forecast is wrong: budget the error</h3>
+        <p>Bias vs spread, ABC/XYZ, and five forecasters on 45 real SKUs. The learned model beats the best spreadsheet by 2.7 percent and runs 17.3 percent short.</p>
+        <span class="meta"><span class="pill amber">▶ Start here</span> <span class="pill">playground</span></span>
+      </a>
+      <a class="course-card" href="courses/02-from-forecast-to-stock.html" style="--diff:#FBBF24">
+        <span class="cicon">📦</span>
+        <span class="cnum">Session 2 · medium</span>
+        <h3>From forecast to stock: safety stock and service level</h3>
+        <p>z x sigma x sqrt(lead time), cycle service vs fill rate, and the newsvendor. A policy that promised 98 percent on A items delivers 97.4 on weeks it never saw.</p>
+        <span class="meta"><span class="pill">stock policy</span></span>
+      </a>
+      <a class="course-card" href="courses/03-allocate-scarce-stock.html" style="--diff:#FBBF24">
+        <span class="cicon">⚖️</span>
+        <span class="cnum">Session 3 · medium</span>
+        <h3>Allocate scarce stock: rules before optimisers</h3>
+        <p>1,200 lanterns, 1,600 wanted, four rules. One gives online nothing, one gives the most margin, and an optimiser cannot choose between them for you.</p>
+        <span class="meta"><span class="pill">halfway scorecard</span></span>
+      </a>
+      <a class="course-card" href="courses/04-shocks-and-the-bullwhip.html" style="--diff:#FB923C">
+        <span class="cicon">🌊</span>
+        <span class="cnum">Session 4 · hands-on</span>
+        <h3>Shocks and the bullwhip</h3>
+        <p>104 real weeks through a three-tier chain of sensible rules: the supplier sees 87.6 times the swing. Sharing sell-through brings it to 16.5.</p>
+        <span class="meta"><span class="pill">bullwhip lever</span></span>
+      </a>
+      <a class="course-card" href="courses/05-when-the-planner-is-right.html" style="--diff:#FB923C">
+        <span class="cicon">🧑‍💼</span>
+        <span class="cnum">Session 5 · hands-on</span>
+        <h3>When the planner is right: overrides and trust</h3>
+        <p>Forecast value added, what 60,000 adjusted forecasts reportedly showed about upward overrides, and the unresolved argument over trusting algorithms.</p>
+        <span class="meta"><span class="pill">contested</span></span>
+      </a>
+      <a class="course-card" href="courses/06-price-it-on-the-bench.html" style="--diff:#F87171">
+        <span class="cicon">🧮</span>
+        <span class="cnum">Session 6 · hardest</span>
+        <h3>The business case: price it on the bench</h3>
+        <p>Error cut to safety stock, cash and units short, minus the licence. The claim pays, the measurement does not, and the break-even is 12.4 percent.</p>
+        <span class="meta"><span class="pill amber">🔒 the memo unlocks at 4 stamps</span></span>
+      </a>
+    </div>
+
+    <div class="diff-legend">
+      <span><i style="background:#34D399"></i>easy - everyone</span>
+      <span><i style="background:#FBBF24"></i>medium</span>
+      <span><i style="background:#FB923C"></i>hands-on</span>
+      <span><i style="background:#F87171"></i>hardest</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Your passport 🎫</h2>
+      <p class="plede">Clear all three quiz questions in a session and it gets stamped. Stamps live in this browser only.</p>
+    </div>
+    <div class="pp-strip"></div>
+  </section>
+
+  <section class="section">
+    <div class="paths">
+      <h2>Choose your path 🗺️</h2>
+      <p class="plede">Three doors into the same conviction: a forecast is only worth the stock it moves.</p>
+      <div class="path"><b>📑 I am being sold a tool</b>
+        <a class="pstep" href="courses/01-every-forecast-is-wrong.html">1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/02-from-forecast-to-stock.html">2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/06-price-it-on-the-bench.html">6</a>
+        <span style="font-size:.82rem;color:var(--muted)">the bar, the stock, then the price</span>
+      </div>
+      <div class="path"><b>🛠️ I will run it day to day</b>
+        <a class="pstep" href="courses/03-allocate-scarce-stock.html">3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/04-shocks-and-the-bullwhip.html">4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/05-when-the-planner-is-right.html">5</a>
+        <span style="font-size:.82rem;color:var(--muted)">allocation, the chain and the overrides</span>
+      </div>
+      <div class="path"><b>🚚 The whole playbook</b>
+        <a class="pstep" href="courses/01-every-forecast-is-wrong.html">1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/02-from-forecast-to-stock.html">2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/03-allocate-scarce-stock.html">3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/04-shocks-and-the-bullwhip.html">4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/05-when-the-planner-is-right.html">5</a><span class="parr">→</span>
+        <a class="pstep" href="courses/06-price-it-on-the-bench.html">6</a>
+        <span style="font-size:.82rem;color:var(--muted)">from a vendor slide to a playbook you can sign</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>What is real here 🧾</h2>
+      <p class="plede">Sessions about measuring forecasts honestly owe you an exact account of their own numbers.</p>
+    </div>
+    <table class="clean">
+      <tr><th>Claim</th><th>Status</th></tr>
+      <tr><td>The 45 SKUs and 104 weeks of demand</td><td>Real. UCI Online Retail II (Daqing Chen, CC BY 4.0), a UK online giftware and homeware retailer, 2009 to 2011; sampled 5 SKUs per ABC x XYZ cell</td></tr>
+      <tr><td>The five forecasters, their errors and the stock check</td><td>Computed in your browser on held-out weeks; a Python reference run agrees value by value</td></tr>
+      <tr><td>The bullwhip lever</td><td>A real order-up-to policy at three tiers fed the real weekly demand. The chain's structure is a teaching model</td></tr>
+      <tr><td>Northwick, its volumes, costs, channels and the tool's price</td><td>Constructed, and labelled on every page and widget. Your numbers will differ</td></tr>
+      <tr><td>The research</td><td>Lee, Padmanabhan and Whang (1997) and the M5 competition read at source; the 2009 adjustment study and some others reported from abstracts, and said so</td></tr>
+      <tr><td>Vendor and consultancy claims</td><td>Taught as claims with their stated basis, never as findings. Re-verify any price before you sign</td></tr>
+    </table>
+  </section>
+
+  <section class="section mm-section">
+    <h2>The knowledge map 🧠</h2>
+    <p class="mm-lede">All six sessions at a glance - hover a session to spotlight its concepts, click any node to jump in.</p>
+    <div class="mm-wrap"><div id="mindmap"></div></div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>learn-ai-supply-chain-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span>Pairs with <a href="https://phoebefu6.github.io/learn-timeseries-forecasting-with-phoebe/">Learn Timeseries Forecasting ↗</a></span>
+  </footer>
+
+</main>
+
+<script>
+window.MINDMAP_DATA = {
+  "title": "AI + Supply\nChain",
+  "centerColor": "#26330F",
+  "sessions": [
+    {
+      "label": "Every forecast\nis wrong",
+      "href": "courses/01-every-forecast-is-wrong.html",
+      "color": "#34D399",
+      "concepts": [
+        {
+          "label": "Bias vs spread",
+          "href": "courses/01-every-forecast-is-wrong.html"
+        },
+        {
+          "label": "ABC x XYZ",
+          "href": "courses/01-every-forecast-is-wrong.html"
+        },
+        {
+          "label": "Where AI earns it",
+          "href": "courses/01-every-forecast-is-wrong.html"
+        }
+      ]
+    },
+    {
+      "label": "Forecast\nto stock",
+      "href": "courses/02-from-forecast-to-stock.html",
+      "color": "#FBBF24",
+      "concepts": [
+        {
+          "label": "z x sigma x sqrt(L)",
+          "href": "courses/02-from-forecast-to-stock.html"
+        },
+        {
+          "label": "Service vs fill rate",
+          "href": "courses/02-from-forecast-to-stock.html"
+        },
+        {
+          "label": "Newsvendor ratio",
+          "href": "courses/02-from-forecast-to-stock.html"
+        }
+      ]
+    },
+    {
+      "label": "Allocate\nscarce stock",
+      "href": "courses/03-allocate-scarce-stock.html",
+      "color": "#FBBF24",
+      "concepts": [
+        {
+          "label": "Four rules",
+          "href": "courses/03-allocate-scarce-stock.html"
+        },
+        {
+          "label": "Rationing game",
+          "href": "courses/03-allocate-scarce-stock.html"
+        },
+        {
+          "label": "Tell the optimiser",
+          "href": "courses/03-allocate-scarce-stock.html"
+        }
+      ]
+    },
+    {
+      "label": "Shocks and\nthe bullwhip",
+      "href": "courses/04-shocks-and-the-bullwhip.html",
+      "color": "#FB923C",
+      "concepts": [
+        {
+          "label": "Four causes",
+          "href": "courses/04-shocks-and-the-bullwhip.html"
+        },
+        {
+          "label": "Share sell-through",
+          "href": "courses/04-shocks-and-the-bullwhip.html"
+        },
+        {
+          "label": "Which delay?",
+          "href": "courses/04-shocks-and-the-bullwhip.html"
+        }
+      ]
+    },
+    {
+      "label": "When the planner\nis right",
+      "href": "courses/05-when-the-planner-is-right.html",
+      "color": "#FB923C",
+      "concepts": [
+        {
+          "label": "Value added",
+          "href": "courses/05-when-the-planner-is-right.html"
+        },
+        {
+          "label": "Up vs down",
+          "href": "courses/05-when-the-planner-is-right.html"
+        },
+        {
+          "label": "Aversion vs bias",
+          "href": "courses/05-when-the-planner-is-right.html"
+        }
+      ]
+    },
+    {
+      "label": "Price it on\nthe bench",
+      "href": "courses/06-price-it-on-the-bench.html",
+      "color": "#F87171",
+      "concepts": [
+        {
+          "label": "Five lines to money",
+          "href": "courses/06-price-it-on-the-bench.html"
+        },
+        {
+          "label": "Break-even cut",
+          "href": "courses/06-price-it-on-the-bench.html"
+        },
+        {
+          "label": "Cash or service",
+          "href": "courses/06-price-it-on-the-bench.html"
+        }
+      ]
+    }
+  ]
+};
+</script>
+<script src="assets/mindmap.js?v=1"></script>
+<script src="assets/app.js?v=2"></script>
+</body>
+</html>

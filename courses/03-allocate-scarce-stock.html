@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Session 3 of 6. A short-supply week: 1,200 lanterns for 1,600 wanted. Fair share, priority, margin-first and floor-then-margin rules, the rationing game, and what an optimiser must be told before it can allocate anything.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Allocate scarce stock: rules before optimisers - learn ai supply chain with phoebe">
+<meta property="og:description" content="Session 3 of 6. Same 1,200 units, four rules: one gives online nothing, one starves South at 20 percent, one keeps everyone above half for GBP 105 less margin.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/courses/03-allocate-scarce-stock.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Allocate scarce stock: rules before optimisers - learn ai supply chain with phoebe">
+<meta name="twitter:description" content="Session 3 of 6. Every allocation rule is a decision about which customers wait. Write it down before you buy a solver to apply it.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Session 3 · Allocate scarce stock: rules before optimisers - learn ai supply chain with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-supply-chain-with-phoebe</a> / Session 3 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI + Supply Chain with Phoebe · Session 3 of 6</div>
+    <h1>Allocate scarce stock: <span class="accent">rules before optimisers</span></h1>
+    <p class="sub">There are 1,200 lanterns and 1,600 wanted. Somebody is going to wait, and whoever wrote the allocation rule chose who. Tonight you run four rules on the same short-supply week, watch one of them quietly give online nothing, learn why customers who know the rule start ordering more than they need, and write the rule an optimiser would have to be told. Then you score Northwick's playbook at the halfway mark.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Medium</span>
+      <span class="chip audience">Ops and planning leads being sold an AI tool</span>
+      <span class="chip audience">Planners and analysts who will run it</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:3">0-3 · Welcome</span>
+      <span class="a2" style="flex:17">3-20 · Four rules, one shortage</span>
+      <span class="a3" style="flex:22">20-42 · Build-along: Northwick's allocation rules + halfway scorecard</span>
+      <span class="a4" style="flex:3">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>When there is not enough, the rule decides</h2>
+    </div>
+    <p class="lede">Sessions 1 and 2 sized the error and turned it into stock. Tonight the stock is <strong>not enough</strong>. A supplier ships short, a best seller runs ahead of plan, and the planner has one week's units to split across stores and online. That split is the third section of Northwick's AI planning playbook.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">Constructed Northwick example = invented, labelled every time</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Four allocation rules you can apply by hand, the margin and the customer each one gives up, the reason allocating on orders teaches next season's forecast a demand that never existed, and the three things any optimiser must be told before it can help. Then section 3 of the playbook, and a forgiving halfway scorecard on sections 1 to 3.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The short-supply week we will use all night<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Constructed Northwick example.</strong> One best-selling lantern, one week. <strong>1,200 units</strong> arrive at the DCs; the channels want <strong>1,600</strong> between them:</p>
+        <table class="clean">
+          <tr><th>Channel</th><th>Units wanted</th><th>Margin a unit</th></tr>
+          <tr><td><strong>North stores</strong> (DC North)</td><td>700</td><td>GBP 7.50</td></tr>
+          <tr><td><strong>South stores</strong> (DC South)</td><td>500</td><td>GBP 6.80</td></tr>
+          <tr><td><strong>Online</strong></td><td>400</td><td>GBP 9.00</td></tr>
+        </table>
+        <p>400 units of demand will not be met this week whatever you do. The only question is where the gap lands, and what that choice costs in margin and in customers. Your numbers will differ; the arithmetic will not.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Lee, Padmanabhan and Whang's 1997 Management Science paper names a "rationing game" as one of four sources of the bullwhip effect, alongside demand signal processing, order batching and price variations. Allocation is not a back-office detail: the rule you pick changes how customers order, which changes the demand signal everyone upstream plans from.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers fair share, priority and margin allocation</span>
+      <h2>Four rules, one pile, four different losers</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">Every allocation rule answers the same question in a different order: who gets served first? <strong>Fair share</strong> gives everyone the same fraction. <strong>Priority</strong> serves a named channel in full before the next. <strong>Margin first</strong> serves whoever earns most a unit. <strong>Floor, then margin</strong> guarantees everyone a minimum and then chases margin with what is left.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 478" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Constructed Northwick example. One pile of 1,200 lanterns flows through four rules into North stores, South stores and online. Fair share: 525, 375, 300, each 75 percent, margin GBP 9,188. Stores first: 700, 500, 0, online gets 0 percent, margin GBP 8,650. Highest margin first: 700, 100, 400, South gets 20 percent, margin GBP 9,530. Floor 50 percent then margin: 550, 250, 400, lowest fill 50 percent, margin GBP 9,425.">
+        <defs>
+          <filter id="s3aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="31" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s3aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s3aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s3aH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s3aL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s3aS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s3aV { font: 800 18px Inter, sans-serif; fill: #26330F; }
+          .s3aA { font: 700 11px Inter, sans-serif; fill: #3D5020; }
+          .s3aN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s3aH" x="30" y="26">ONE SHORTAGE, FOUR RULES</text>
+        <text class="s3aS" x="30" y="44">Constructed Northwick example</text>
+
+        <text class="s3aL" x="465" y="40" text-anchor="middle">North stores</text>
+        <text class="s3aS" x="465" y="56" text-anchor="middle">wants 700 · GBP 7.50</text>
+        <text class="s3aL" x="615" y="40" text-anchor="middle">South stores</text>
+        <text class="s3aS" x="615" y="56" text-anchor="middle">wants 500 · GBP 6.80</text>
+        <text class="s3aL" x="765" y="40" text-anchor="middle">Online</text>
+        <text class="s3aS" x="765" y="56" text-anchor="middle">wants 400 · GBP 9.00</text>
+
+        <g filter="url(#s3aSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the pile -->
+          <rect x="30" y="150" width="120" height="180" rx="8" transform="rotate(-0.6 90 240)" fill="url(#s3aHc)"/>
+          <rect x="38" y="206" width="104" height="72" rx="6" fill="#FFFFFF"/>
+          <!-- arrows pile to rules -->
+          <path d="M152 236 C170 236 168 107 184 107" marker-end="url(#s3aAr)"/>
+          <path d="M152 238 C170 238 168 197 184 197" marker-end="url(#s3aAr)"/>
+          <path d="M152 242 C170 242 168 287 184 287" marker-end="url(#s3aAr)"/>
+          <path d="M152 244 C170 244 168 377 184 377" marker-end="url(#s3aAr)"/>
+          <!-- rule boxes -->
+          <rect x="190" y="70" width="180" height="74" rx="8" transform="rotate(-0.4 280 107)" fill="#F2F5E8"/>
+          <rect x="190" y="160" width="180" height="74" rx="8" transform="rotate(0.4 280 197)" fill="#F2F5E8"/>
+          <rect x="190" y="250" width="180" height="74" rx="8" transform="rotate(-0.3 280 287)" fill="#F2F5E8"/>
+          <rect x="190" y="340" width="180" height="74" rx="8" transform="rotate(0.5 280 377)" fill="#F2F5E8"/>
+          <!-- row 1 fair share: 75 / 75 / 75 -->
+          <rect x="395" y="76" width="140" height="62" rx="6" fill="#FFFFFF"/>
+          <rect x="397" y="91.5" width="136" height="46.5" fill="#C9D6A8" stroke="none"/>
+          <rect x="545" y="76" width="140" height="62" rx="6" fill="#FFFFFF"/>
+          <rect x="547" y="91.5" width="136" height="46.5" fill="#C9D6A8" stroke="none"/>
+          <rect x="695" y="76" width="140" height="62" rx="6" fill="#FFFFFF"/>
+          <rect x="697" y="91.5" width="136" height="46.5" fill="#C9D6A8" stroke="none"/>
+          <!-- row 2 stores first: 100 / 100 / 0 -->
+          <rect x="395" y="166" width="140" height="62" rx="6" fill="#FFFFFF"/>
+          <rect x="397" y="166" width="136" height="62" fill="#C9D6A8" stroke="none"/>
+          <rect x="545" y="166" width="140" height="62" rx="6" fill="#FFFFFF"/>
+          <rect x="547" y="166" width="136" height="62" fill="#C9D6A8" stroke="none"/>
+          <rect x="695" y="166" width="140" height="62" rx="6" transform="rotate(-0.6 765 197)" fill="#F2C200"/>
+          <!-- row 3 margin first: 100 / 20 / 100 -->
+          <rect x="395" y="256" width="140" height="62" rx="6" fill="#FFFFFF"/>
+          <rect x="397" y="256" width="136" height="62" fill="#C9D6A8" stroke="none"/>
+          <rect x="545" y="256" width="140" height="62" rx="6" fill="#FFFFFF"/>
+          <rect x="547" y="305.6" width="136" height="12.4" fill="#C9D6A8" stroke="none"/>
+          <rect x="695" y="256" width="140" height="62" rx="6" fill="#FFFFFF"/>
+          <rect x="697" y="256" width="136" height="62" fill="#C9D6A8" stroke="none"/>
+          <!-- row 4 floor then margin: 79 / 50 / 100 -->
+          <rect x="395" y="346" width="140" height="62" rx="6" fill="#FFFFFF"/>
+          <rect x="397" y="359.3" width="136" height="48.7" fill="#C9D6A8" stroke="none"/>
+          <rect x="545" y="346" width="140" height="62" rx="6" fill="#FFFFFF"/>
+          <rect x="547" y="377" width="136" height="31" fill="#C9D6A8" stroke="none"/>
+          <rect x="695" y="346" width="140" height="62" rx="6" fill="#FFFFFF"/>
+          <rect x="697" y="346" width="136" height="62" fill="#C9D6A8" stroke="none"/>
+        </g>
+
+        <text class="s3aL" x="30" y="140">Lantern stock</text>
+        <text class="s3aV" x="90" y="236" text-anchor="middle">1,200</text>
+        <text class="s3aS" x="90" y="254" text-anchor="middle">units this week</text>
+        <text class="s3aS" x="90" y="270" text-anchor="middle">1,600 wanted</text>
+
+        <text class="s3aL" x="204" y="98">Fair share</text>
+        <text class="s3aS" x="204" y="116">GBP 9,188</text>
+        <text class="s3aS" x="204" y="132">lowest fill 75%</text>
+        <text class="s3aL" x="204" y="188">Stores first</text>
+        <text class="s3aS" x="204" y="206">GBP 8,650</text>
+        <text class="s3aS" x="204" y="222">lowest fill 0%</text>
+        <text class="s3aL" x="204" y="278">Highest margin first</text>
+        <text class="s3aS" x="204" y="296">GBP 9,530</text>
+        <text class="s3aS" x="204" y="312">lowest fill 20%</text>
+        <text class="s3aL" x="204" y="368">Floor 50%, then margin</text>
+        <text class="s3aS" x="204" y="386">GBP 9,425</text>
+        <text class="s3aS" x="204" y="402">lowest fill 50%</text>
+
+        <text class="s3aL" x="465" y="112" text-anchor="middle">525 · 75%</text>
+        <text class="s3aL" x="615" y="112" text-anchor="middle">375 · 75%</text>
+        <text class="s3aL" x="765" y="112" text-anchor="middle">300 · 75%</text>
+        <text class="s3aL" x="465" y="202" text-anchor="middle">700 · 100%</text>
+        <text class="s3aL" x="615" y="202" text-anchor="middle">500 · 100%</text>
+        <text class="s3aL" x="765" y="202" text-anchor="middle">0 · 0% · waits</text>
+        <text class="s3aL" x="465" y="292" text-anchor="middle">700 · 100%</text>
+        <text class="s3aL" x="615" y="292" text-anchor="middle">100 · 20%</text>
+        <text class="s3aL" x="765" y="292" text-anchor="middle">400 · 100%</text>
+        <text class="s3aL" x="465" y="372" text-anchor="middle">550 · 79%</text>
+        <text class="s3aL" x="615" y="372" text-anchor="middle">250 · 50%</text>
+        <text class="s3aL" x="765" y="372" text-anchor="middle">400 · 100%</text>
+
+        <text class="s3aN" x="30" y="440">Same 1,200 units: margin moves by GBP 880 and the lowest channel fill from 0% to 75%.</text>
+        <text class="s3aN" x="30" y="462">Green fill = share of what the channel wanted. Constructed numbers; your numbers will differ.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - stores first never mentions online, and still decides online gets nothing</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Four rules, written so a planner can apply them<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <tr><th>Rule</th><th>How to apply it by hand</th><th>At 1,200 units (constructed)</th></tr>
+          <tr><td><strong>Fair share</strong></td><td>Everyone gets the same fraction: supply divided by total demand, times what each channel wanted</td><td>1,200 / 1,600 = 75% each: 525 / 375 / 300, GBP 9,188</td></tr>
+          <tr><td><strong>Stores first</strong> (priority)</td><td>Serve the priority list in order, each in full, until the units run out</td><td>700 / 500 / 0: online gets nothing, GBP 8,650</td></tr>
+          <tr><td><strong>Highest margin first</strong></td><td>Sort channels by margin a unit, serve in that order</td><td>Online 400, North 700, South what is left: 100 (20%), GBP 9,530</td></tr>
+          <tr><td><strong>Floor, then margin</strong></td><td>Give every channel a fixed share of its demand first (here 50%), then serve the rest by margin</td><td>350 / 250 / 200 first, then online +200, North +200: 550 / 250 / 400, GBP 9,425</td></tr>
+        </table>
+        <p>Read the last two rows together. The floor costs <strong>GBP 105</strong> of margin against margin first (9,530 minus 9,425) and buys this: no channel below half. Whether GBP 105 is cheap or expensive is a business judgement, and it is exactly the judgement the rule should write down.</p>
+        <div class="callout tip">
+          <p><strong>The one-line test.</strong> For any rule, ask: at this week's supply, which channel has the lowest fill, and would its manager sign the rule if they read that number first?</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Every rule is a decision about which customers wait<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>There is no neutral rule. Fair share looks neutral and still spreads the shortage onto every customer, including the channel that earns most a unit. Stores first looks like loyalty to the shops and is, in practice, a decision that online customers see "out of stock" all week. Margin first looks like good business and lands the whole gap on South, the channel with the thinnest margin, which may also be the one with the most loyal customers.</p>
+        <p>None of these is wrong. Each is a value judgement dressed as arithmetic. The professional norm is to <strong>write the judgement down</strong>, name who owns it, and review it after every shortage, so that the next short week is decided by a rule people agreed to and not by whoever was on shift.</p>
+        <ul>
+          <li><strong>Floor</strong> protects the relationship: no channel goes dark.</li>
+          <li><strong>Margin</strong> protects this week's profit.</li>
+          <li><strong>Tie-break</strong> settles the case the other two leave open, such as two channels with equal margin.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the rationing game</span>
+      <h2>Ration on orders, and customers order more than they need</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Fair share has a catch. If customers learn that, in a shortage, everyone gets the same <strong>fraction of what they ordered</strong>, the rational move is to order more than they need. When supply comes back, the extra orders are cancelled or never repeated. They were never demand. But the order history recorded them, and next season's forecast learns from that history.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 336" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Constructed illustration. A store that sells 100 units expects a 75 percent fill and orders 140. Rationed at 75 percent it receives 105. The extra 40 ordered units are phantom demand: the order history records 140, and next season's forecast learns demand that never existed.">
+        <defs>
+          <filter id="s3bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="37" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s3bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s3bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s3bH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s3bL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s3bS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s3bB { font: 800 11px Inter, sans-serif; fill: #5E4500; }
+          .s3bV { font: 800 16px Inter, sans-serif; fill: #26330F; }
+          .s3bN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s3bH" x="40" y="26">THE RATIONING GAME, ONE STORE</text>
+
+        <g filter="url(#s3bSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M60 230 L610 230" stroke="#4F5842"/>
+          <rect x="90" y="110" width="80" height="120" rx="4" transform="rotate(-0.5 130 170)" fill="url(#s3bHc)"/>
+          <rect x="300" y="110" width="80" height="120" rx="4" transform="rotate(0.4 340 170)" fill="url(#s3bHc)"/>
+          <rect x="300" y="62" width="80" height="48" rx="4" transform="rotate(0.4 340 86)" fill="#F2C200"/>
+          <rect x="510" y="104" width="80" height="126" rx="4" transform="rotate(-0.4 550 167)" fill="#C9D6A8"/>
+          <path d="M182 180 L288 180" marker-end="url(#s3bAr)"/>
+          <path d="M392 180 L498 180" marker-end="url(#s3bAr)"/>
+          <path d="M384 70 C470 36 560 36 632 74" marker-end="url(#s3bAr)"/>
+          <rect x="640" y="62" width="210" height="72" rx="8" transform="rotate(0.5 745 98)" fill="#FFFFFF"/>
+          <path d="M745 140 L745 164" marker-end="url(#s3bAr)"/>
+          <rect x="640" y="170" width="210" height="72" rx="8" transform="rotate(-0.5 745 206)" fill="#F2F5E8"/>
+        </g>
+
+        <text class="s3bV" x="130" y="102" text-anchor="middle">100 needed</text>
+        <text class="s3bV" x="340" y="54" text-anchor="middle">140</text>
+        <text class="s3bL" x="340" y="92" text-anchor="middle">+40</text>
+        <text class="s3bB" x="392" y="96">40 phantom units</text>
+        <text class="s3bV" x="550" y="96" text-anchor="middle">105 received</text>
+
+        <text class="s3bS" x="235" y="168" text-anchor="middle">expects 75%</text>
+        <text class="s3bS" x="445" y="168" text-anchor="middle">rationed 75%</text>
+
+        <text class="s3bL" x="130" y="250" text-anchor="middle">Store sells</text>
+        <text class="s3bS" x="130" y="266" text-anchor="middle">real demand, a week</text>
+        <text class="s3bL" x="340" y="250" text-anchor="middle">Store orders</text>
+        <text class="s3bS" x="340" y="266" text-anchor="middle">to beat the ration</text>
+        <text class="s3bL" x="550" y="250" text-anchor="middle">Store receives</text>
+        <text class="s3bS" x="550" y="266" text-anchor="middle">75% of 140</text>
+
+        <text class="s3bL" x="656" y="92">Order history</text>
+        <text class="s3bS" x="656" y="112">records 140 as demand</text>
+        <text class="s3bL" x="656" y="200">Next season's forecast</text>
+        <text class="s3bS" x="656" y="220">learns the phantom demand</text>
+
+        <text class="s3bN" x="40" y="300">When supply returns, the extra 40 is cancelled. The history already counted it.</text>
+        <text class="s3bN" x="40" y="322">Constructed illustration: 140 at 75% fill gets 105, the 100 it needed plus 5. Your numbers will differ.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - rationing on orders pays customers to inflate them, and the forecast learns the inflation</figcaption>
+    </figure>
+
+    <div class="tick" data-stages="Shortage|Ration|Inflate|Recover|Forecast" data-title="How a fair rule teaches a wrong forecast">
+      <p class="tick-note" data-stage="0"><b>Shortage.</b> Supply is 75% of what the channels ordered last time. Customers notice.</p>
+      <p class="tick-note" data-stage="1"><b>Ration.</b> The rule gives every customer 75% of what it ordered. Fair, on paper.</p>
+      <p class="tick-note" data-stage="2"><b>Inflate.</b> A store that needs 100 orders 140 so that 75% covers it. Everyone does the same.</p>
+      <p class="tick-note" data-stage="3"><b>Recover.</b> Supply returns. The extra orders are cancelled or never repeated. They were never demand.</p>
+      <p class="tick-note" data-stage="4"><b>Forecast.</b> The order history still shows a spike. Next season's forecast plans for it. Constructed illustration.</p>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the shortage outlives itself<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Lee, Padmanabhan and Whang (Management Science, 1997) name the rationing game as one of <strong>four sources of the bullwhip effect</strong>: demand signal processing, the rationing game, order batching and price variations. The mechanism above is why it belongs on that list: the allocation rule changes how customers order, and the inflated orders travel upstream as if they were real.</p>
+        <p>Two consequences for Northwick. First, a shortage week's orders are a <strong>bad training signal</strong>: if they reach the forecast unflagged, the forecast learns the panic. Second, the bigger the shortage and the more predictable the rationing rule, the bigger the inflation. Session 4 runs the bullwhip itself on 104 real weeks; tonight you only need to know that the allocation rule is one of the levers.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The same paper reports that Procter &amp; Gamble "found that the diaper orders issued by the distributors have a degree of variability". That is the bullwhip in one line: orders upstream swinging more than the end demand behind them, which is what the rationing game helps produce.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Allocate on sell-through, not on orders<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Among the counteracting actions, the Management Science paper lists "information sharing of sell-through and inventory status data". For allocation that becomes a simple rule: <strong>split scarce stock by what each channel actually sold</strong> in recent weeks, not by what it ordered this week. A store that orders 140 but sold 100 a week gets its share of 100. Inflating the order earns nothing, so nobody bothers.</p>
+        <ul>
+          <li><strong>What it needs:</strong> point-of-sale and online sales by channel, and stock on hand, visible to the planner on the day of the shortage.</li>
+          <li><strong>What it fixes:</strong> the incentive to inflate, and the phantom spike in next season's history.</li>
+          <li><strong>What to flag anyway:</strong> mark shortage weeks in the demand history, so the forecast in session 1's playground never learns from rationed sales as if they were full demand.</li>
+        </ul>
+        <p>The paper's other counteracting actions belong to session 4, where the information sharing is measured on a three-tier chain.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers what an optimiser needs to be told</span>
+      <h2>An optimiser does the arithmetic, not the judgement</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">An allocation optimiser does what you just did by hand, over thousands of SKUs and locations, every day, with trucks and shelf space in the sum. That is real value. What it <strong>cannot</strong> do is choose the objective, the constraints or the tie-breaks. Those arrive as inputs, and if nobody writes them, a default in the software writes them for you.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 386" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three decision inputs written by people: the objective, maximise margin or fill; the constraints, a 50 percent floor per channel and truck capacity per DC; and the tie-break, a priority list with North before South. All three feed an optimiser that does the same arithmetic over thousands of SKUs, locations and days, which produces the allocation in units per channel.">
+        <defs>
+          <filter id="s3cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s3cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s3cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s3cH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s3cL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s3cS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s3cA { font: 700 11px Inter, sans-serif; fill: #3D5020; }
+          .s3cN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s3cH" x="40" y="22">WHAT AN OPTIMISER NEEDS TO BE TOLD</text>
+
+        <g filter="url(#s3cSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="34" width="260" height="28" rx="6" transform="rotate(-0.5 170 48)" fill="#F2C200"/>
+          <rect x="40" y="72" width="260" height="72" rx="8" transform="rotate(0.4 170 108)" fill="#F2F5E8"/>
+          <rect x="40" y="162" width="260" height="72" rx="8" transform="rotate(-0.4 170 198)" fill="#F2F5E8"/>
+          <rect x="40" y="252" width="260" height="72" rx="8" transform="rotate(0.3 170 288)" fill="#F2F5E8"/>
+          <path d="M304 108 C350 108 350 200 392 204" marker-end="url(#s3cAr)"/>
+          <path d="M304 198 C340 198 350 210 392 210" marker-end="url(#s3cAr)"/>
+          <path d="M304 288 C350 288 350 220 392 216" marker-end="url(#s3cAr)"/>
+          <rect x="400" y="140" width="180" height="140" rx="10" transform="rotate(-0.5 490 210)" fill="url(#s3cHc)"/>
+          <rect x="412" y="172" width="156" height="76" rx="6" fill="#FFFFFF"/>
+          <path d="M584 210 L652 210" marker-end="url(#s3cAr)"/>
+          <rect x="660" y="160" width="190" height="100" rx="8" transform="rotate(0.5 755 210)" fill="#FFFFFF"/>
+        </g>
+
+        <text class="s3cL" x="54" y="53">People write these three</text>
+
+        <text class="s3cL" x="56" y="100">Objective</text>
+        <text class="s3cS" x="56" y="118">maximise margin, or maximise fill</text>
+        <text class="s3cS" x="56" y="134">one of them, stated</text>
+        <text class="s3cL" x="56" y="190">Constraints</text>
+        <text class="s3cS" x="56" y="208">50% floor per channel</text>
+        <text class="s3cS" x="56" y="224">truck capacity per DC</text>
+        <text class="s3cL" x="56" y="280">Tie-break</text>
+        <text class="s3cS" x="56" y="298">priority list: North before South</text>
+        <text class="s3cS" x="56" y="314">when the objective cannot choose</text>
+
+        <text class="s3cL" x="490" y="196" text-anchor="middle">Optimiser</text>
+        <text class="s3cS" x="490" y="214" text-anchor="middle">same arithmetic</text>
+        <text class="s3cS" x="490" y="230" text-anchor="middle">thousands of SKUs</text>
+        <text class="s3cA" x="490" y="132" text-anchor="middle">the solver</text>
+
+        <text class="s3cL" x="676" y="194">The allocation</text>
+        <text class="s3cS" x="676" y="214">units per channel</text>
+        <text class="s3cS" x="676" y="230">per SKU, per week</text>
+
+        <text class="s3cN" x="40" y="352">The solver picks the numbers. It cannot pick what "best" means, or who wins a tie.</text>
+        <text class="s3cN" x="40" y="374">Leave an input blank and the software's default fills it, unread.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the yellow column is the part no solver can write for you</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Write the rule before you buy the solver<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A vendor demo of an allocation optimiser usually shows the output: tidy units per store, higher margin than last year's manual split. Ask what it was told:</p>
+        <ul>
+          <li><strong>Objective.</strong> Margin, fill, revenue, or a weighted mix? Margin first at 1,200 units leaves South at 20 percent in the constructed Northwick example. If the objective is pure margin, the optimiser will do the same thing, faster, across every SKU.</li>
+          <li><strong>Constraints.</strong> Is there a floor per channel? Truck capacity per DC? A minimum display quantity per store? A constraint left out is a customer the solver is free to starve.</li>
+          <li><strong>Tie-breaks.</strong> When two channels score the same, who goes first? If nobody says, the answer is whatever order the data happened to arrive in.</li>
+        </ul>
+        <p>If you can write those three lines for one SKU on one short week, you can check the optimiser's output against them. If you cannot, the optimiser is not the problem yet.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The rationing game was named in 1997 for a reason that has not gone away: Lee, Padmanabhan and Whang list it beside order batching and price variations as a source of distortion that sits in how the chain is run, not in how demand behaves. A faster solver applying the same order-based rule distorts faster.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>When an optimiser earns its place<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The routing call mirrors session 1's spreadsheet-or-model question, and the general version lives in <a href="https://phoebefu6.github.io/learn-when-ai-with-phoebe/courses/03-when-classic-ml-wins.html">When AI: when classic ML wins ↗</a>.</p>
+        <ul>
+          <li><strong>A written rule is enough</strong> when shortages are occasional, involve a handful of SKUs and channels, and happen about weekly. A planner applies floor-then-margin by hand in minutes, as you will in the build-along.</li>
+          <li><strong>An optimiser earns its place</strong> when the same decision runs over many SKUs times many locations, daily, with shared constraints between them (one truck, one DC, one supplier allocation) that a person cannot hold in their head.</li>
+          <li><strong>Either way</strong>, the objective, the constraints and the tie-breaks are the same three lines. The optimiser scales the rule; it does not replace writing it.</li>
+        </ul>
+        <p>The maths of multi-location inventory optimisation is out of scope here; the concept is what matters for the buying decision.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Northwick's allocation rules, and the halfway scorecard</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">The allocator below applies each rule to the constructed short-supply week, in your browser. Pick a rule, move the supply, and read two numbers: the margin this week and the lowest channel fill. Then write section 3 of Northwick's playbook and score sections 1 to 3.</p>
+
+    <div id="asc-alloc"></div>
+
+    <div class="steps">
+      <div class="step"><p><strong>Start with fair share at 1,200.</strong> Pick "Fair share" with "Units available this week" at 1,200. Every channel reads <strong>75%</strong>: 525 / 375 / 300 units, margin <strong>GBP 9,188</strong>. That is the baseline every other rule is measured against.</p>
+        <div class="prompt-box good"><span class="label">★ Fair share, 1,200 units</span>
+North 525 · South 375 · Online 300 (75% each)
+margin GBP 9,188 · lowest fill 75%</div></div>
+      <div class="step"><p><strong>Pick "Stores first".</strong> North and South fill completely, 700 and 500. Online reads <strong>0 units, 0%</strong>, and margin falls to <strong>GBP 8,650</strong>, the lowest of the four, because the channel with the best margin a unit is the one left out. The verdict line says whoever wrote the rule decided that.</p>
+        <div class="prompt-box good"><span class="label">★ Stores first, 1,200 units</span>
+North 700 · South 500 · Online 0 (0%)
+margin GBP 8,650 · lowest fill 0%: online waits all week</div></div>
+      <div class="step"><p><strong>Pick "Highest margin first".</strong> Online (GBP 9.00) fills, then North (GBP 7.50), and South gets the last <strong>100 units, 20%</strong>. Margin is the highest of the four: <strong>GBP 9,530</strong>.</p>
+        <div class="prompt-box good"><span class="label">★ Highest margin first, 1,200 units</span>
+North 700 · South 100 (20%) · Online 400
+margin GBP 9,530 · lowest fill 20%: South carries the gap</div></div>
+      <div class="step"><p><strong>Pick "Floor, then margin" with the floor at 50%.</strong> Every channel first gets half its demand, then online and North top up by margin: 550 / 250 / 400, margin <strong>GBP 9,425</strong>, lowest fill <strong>50%</strong>. That is <strong>GBP 105 less</strong> than margin first, and nobody below half.</p>
+        <div class="prompt-box good"><span class="label">★ Floor 50%, then margin, 1,200 units</span>
+North 550 · South 250 (50%) · Online 400
+margin GBP 9,425 = GBP 105 less than margin first
+lowest fill 50%: nobody below half</div></div>
+      <div class="step"><p><strong>Drag supply to 800.</strong> Now the shortage is half the demand. Margin first gives 400 / 0 / 400: <strong>South gets nothing</strong>, margin GBP 6,600, lowest fill 0%. Floor, then margin, and fair share both read 350 / 250 / 200, GBP 6,125, lowest 50%: at 800 the floor uses every unit before margin gets a say. Drag to 1,400 and margin first gives South 300 (60%), GBP 10,890; at 1,600 every rule reads 700 / 500 / 400 and GBP 12,250, because there is no shortage left to allocate.</p>
+        <div class="prompt-box good"><span class="label">★ The same rule, a deeper shortage</span>
+800 units, margin first: 400 / 0 / 400, GBP 6,600, lowest 0%
+800 units, floor 50%:    350 / 250 / 200, GBP 6,125, lowest 50%
+1,400 units, margin first: 700 / 300 / 400, GBP 10,890, lowest 60%
+1,600 units, any rule:   700 / 500 / 400, GBP 12,250</div></div>
+      <div class="step"><p><strong>Write section 3 of the playbook.</strong> Copy this into your own version of Northwick's playbook, under sections 1 and 2.</p>
+        <div class="prompt-box good"><span class="label">★ Playbook section 3 · allocation rules</span>
+Short-supply weeks: floor 50% per channel, then by margin a unit.
+Tie-break: North before South.
+Allocate on sell-through, not on orders; flag shortage weeks in history.
+Rule reviewed after every shortage.
+Owner: the supply planning lead.
+Constructed Northwick example. Your numbers will differ.</div></div>
+    </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Northwick's AI planning playbook as a one-page document with six sections. Sections 1 and 2, the forecast-error budget and the stock policy, are done. Section 3, allocation rules, is written tonight: floor 50 percent per channel then margin, tie-break North before South, allocate on sell-through, reviewed after every shortage, owned by the supply planning lead. Sections 4 to 6 are still empty.">
+        <defs>
+          <filter id="s3dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s3dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s3dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s3dH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s3dL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s3dS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s3dA { font: 700 11px Inter, sans-serif; fill: #3D5020; }
+          .s3dN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s3dH" x="40" y="28">NORTHWICK'S AI PLANNING PLAYBOOK</text>
+        <text class="s3dS" x="310" y="28">constructed, one page</text>
+
+        <g filter="url(#s3dSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="40" width="360" height="226" rx="6" transform="rotate(-0.5 220 153)" fill="#FFFFFF"/>
+          <rect x="54" y="52" width="332" height="30" rx="4" fill="#C9D6A8" stroke="#3D5020"/>
+          <rect x="54" y="88" width="332" height="30" rx="4" fill="#C9D6A8" stroke="#3D5020"/>
+          <rect x="54" y="124" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#3D5020"/>
+          <rect x="54" y="160" width="332" height="30" rx="4" fill="url(#s3dHc)" stroke="#CDD3BF"/>
+          <rect x="54" y="196" width="332" height="30" rx="4" fill="url(#s3dHc)" stroke="#CDD3BF"/>
+          <rect x="54" y="232" width="332" height="26" rx="4" fill="url(#s3dHc)" stroke="#CDD3BF"/>
+          <path d="M392 139 C418 139 418 110 436 104" marker-end="url(#s3dAr)"/>
+          <rect x="444" y="52" width="410" height="206" rx="10" transform="rotate(0.4 649 155)" fill="#F2F5E8"/>
+        </g>
+
+        <text class="s3dL" x="66" y="72">1 · Forecast-error budget</text>
+        <text class="s3dS" x="376" y="72" text-anchor="end">done, s1</text>
+        <text class="s3dL" x="66" y="108">2 · Stock policy</text>
+        <text class="s3dS" x="376" y="108" text-anchor="end">done, s2</text>
+        <text class="s3dL" x="66" y="144">3 · Allocation rules</text>
+        <text class="s3dA" x="376" y="144" text-anchor="end">tonight</text>
+        <text class="s3dL" x="66" y="180">4 · Disruption playbook</text>
+        <text class="s3dS" x="376" y="180" text-anchor="end">s4</text>
+        <text class="s3dL" x="66" y="216">5 · Override rules</text>
+        <text class="s3dS" x="376" y="216" text-anchor="end">s5</text>
+        <text class="s3dL" x="66" y="250">6 · Business case</text>
+        <text class="s3dS" x="376" y="250" text-anchor="end">s6</text>
+
+        <text class="s3dH" x="462" y="80">TONIGHT'S SECTION</text>
+        <text class="s3dL" x="462" y="106">Floor: every channel gets 50% first.</text>
+        <text class="s3dL" x="462" y="130">Then margin: online, North, South.</text>
+        <text class="s3dL" x="462" y="154">Tie-break: North before South.</text>
+        <text class="s3dL" x="462" y="178">Allocate on sell-through, not on orders.</text>
+        <text class="s3dL" x="462" y="202">Reviewed after every shortage.</text>
+        <text class="s3dL" x="462" y="236">Owner: the supply planning lead.</text>
+
+        <text class="s3dN" x="40" y="290">Three sections written, three to go. Halfway is the moment to score what is there.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - section 3 names the floor, the tie-break and the owner before the next short week arrives</figcaption>
+    </figure>
+
+    <div class="scorecard" data-title="Halfway scorecard: Northwick's playbook so far">
+      <div class="sc-row"><div class="sc-q">The error budget names the bar to beat
+        <em>Our best spreadsheet method per segment, not a naive forecast.</em></div></div>
+      <div class="sc-row"><div class="sc-q">Bias is reported with the sign kept
+        <em>"Runs 17% short" says which way stock will go wrong; one accuracy number does not.</em></div></div>
+      <div class="sc-row"><div class="sc-q">The stock policy sets service per ABC class from our own holdout error
+        <em>Not a single flat target, and not error measured on weeks the model was fitted on.</em></div></div>
+      <div class="sc-row"><div class="sc-q">The allocation rule is written with a floor and a tie-break
+        <em>Someone reading it on a short week knows which channel waits, and who goes first in a tie.</em></div></div>
+      <div class="sc-row"><div class="sc-q">Every constructed number is marked as constructed, with a date to replace it
+        <em>Margins, demand and supply in the Northwick example are invented. Yours get a date to swap in real ones.</em></div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Halfway, not final.</strong> This scorecard is forgiving on purpose: a 1 is a fine score at the halfway mark, and the point is to see which row is thinnest while there is time to fix it. Session 6 has a strict one, where every row must be solid before the business case goes to the board.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 4</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Find your last short week.</strong> Pick one SKU that ran short in the past year. Write down how the stock was actually split between channels, and who decided. If the answer is "whoever was on shift", that is the finding.</li>
+      <li><strong>Run the four rules by hand.</strong> With that SKU's real supply, demand per channel and margin per unit, compute fair share, your own priority rule, margin first and floor then margin. Note the margin and the lowest fill for each.</li>
+      <li><strong>Look for phantom demand.</strong> In the order history around that short week, compare orders with sell-through. Did any channel order more than it sold, then cancel or skip a later order?</li>
+      <li><strong>Draft section 3 and score it.</strong> Write your own allocation rule with a floor, a tie-break and an owner, then score your sections 1 to 3 on the halfway scorecard. Fix the thinnest row first.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and session 3 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · In the constructed Northwick example, with 1,200 units available, which rule gives online nothing?</p>
+      <button class="qopt" type="button">A · Highest margin first</button>
+      <button class="qopt" type="button">B · Stores first</button>
+      <button class="qopt" type="button">C · Fair share</button>
+      <p class="qwhy">Stores first fills North (700) and South (500) and the 1,200 units are gone: online gets 0, and margin is the lowest of the four at GBP 8,650. Margin first does the opposite and fills online first, because it earns GBP 9.00 a unit.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Customers learn that in a shortage everyone gets the same fraction of what they ordered. What does that do to next season's forecast?</p>
+      <button class="qopt" type="button">A · Nothing, because the extra orders are cancelled when supply returns</button>
+      <button class="qopt" type="button">B · It makes the forecast more cautious, so it under-forecasts</button>
+      <button class="qopt" type="button">C · It learns phantom demand: inflated orders recorded in the history as if they were real</button>
+      <p class="qwhy">The extra orders vanish when supply returns, but the order history already counted them. A forecast trained on that history plans for demand that never existed. Allocating on sell-through, and flagging shortage weeks, removes both the incentive and the spike.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · What can an allocation optimiser not decide for you?</p>
+      <button class="qopt" type="button">A · The objective and the tie-breaks: what "best" means and who goes first when two channels are level</button>
+      <button class="qopt" type="button">B · How many units each store gets once the rule is set</button>
+      <button class="qopt" type="button">C · How to handle thousands of SKUs and locations at once</button>
+      <p class="qwhy">The optimiser does the arithmetic over thousands of SKUs and locations; that is its value. The objective, the constraints such as a floor, and the tie-breaks arrive as inputs. If nobody writes them, a software default does.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ OFFICIAL COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Lee, Padmanabhan, Whang (Management Science 1997)</span><span class="note">43(4), 546-558, doi 10.1287/mnsc.43.4.546. The rationing game as one of four sources of the bullwhip; sell-through information sharing; the P&amp;G diaper orders. Full PDF read at source</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Allocation rules</span><span class="note">Fair share, priority, margin first and floor then margin. Constructed Northwick inputs; the arithmetic is computed by the allocator in your browser</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Allocation optimisers</span><span class="note">Concept only: objective, constraints and tie-breaks as inputs. No solver maths and no named product</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Seams</span><span class="note">Nothing retaught from a sibling course tonight. The routing call links to When AI 03</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 3 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Fair share</b><span>Same fraction for all. Looks neutral, spreads the gap onto every channel.</span></div>
+      <div class="cheat-item"><b>Priority</b><span>Serve a list in order. Whoever is last may get nothing: online, at 1,200.</span></div>
+      <div class="cheat-item"><b>Margin first</b><span>Most margin this week; the thinnest-margin channel carries the gap.</span></div>
+      <div class="cheat-item"><b>Floor, then margin</b><span>Nobody below the floor, then chase margin. Here: GBP 105 for no one below half.</span></div>
+      <div class="cheat-item"><b>Rationing game</b><span>Ration on orders and customers inflate them. Allocate on sell-through; flag shortage weeks.</span></div>
+      <div class="cheat-item"><b>Optimiser inputs</b><span>Objective, constraints, tie-breaks. Write them before you buy the solver.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Tonight one store ordered 40 units it did not need. Session 4 feeds 104 real weeks of demand into a three-tier chain where every tier follows a sensible rule, and the supplier at the top sees 87.6 times the swing customers made.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Session 3 of 6 · learn-ai-supply-chain-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="02-from-forecast-to-stock.html">← Prev: From forecast to stock: safety stock and service level</a> &nbsp;·&nbsp; <a href="04-shocks-and-the-bullwhip.html">Next: Shocks and the bullwhip →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/asc-sample.js?v=1"></script>
+<script src="../assets/asc-live.js?v=1"></script>
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

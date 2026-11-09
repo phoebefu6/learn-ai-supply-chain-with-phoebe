@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Session 6 of 6. Price an AI planning tool on a live bench: forecast-error cut to safety stock, cash, units short and holding cost, minus the licence. The vendor's 30 percent pays; the 2.7 percent measured on real data does not. Find the break-even.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The business case: price it on the bench - learn ai supply chain with phoebe">
+<meta property="og:description" content="Session 6 of 6. At Northwick's constructed scale the tool needs a 12.4 percent error cut to break even. The bench measured 2.7.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/courses/06-price-it-on-the-bench.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The business case: price it on the bench - learn ai supply chain with phoebe">
+<meta name="twitter:description" content="Session 6 of 6. Every forecast is wrong; the question is what it costs. Price the tool, find the break-even, write the memo.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Session 6 · The business case: price it on the bench - learn ai supply chain with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-supply-chain-with-phoebe</a> / Session 6 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI + Supply Chain with Phoebe · Session 6 of 6</div>
+    <h1>The business case: <span class="accent">price it on the bench</span></h1>
+    <p class="sub">Five sessions turned forecast error into stock, allocation, a calmer chain and rules for overrides. Tonight you put a price on all of it. A lever simulator takes a cut in forecast error and follows it into safety stock, cash, units short and holding cost, then subtracts the licence. The vendor's 30 percent pays. The 2.7 percent you measured on real data in session 1 does not. Somewhere between them is the number to negotiate.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Hardest</span>
+      <span class="chip audience">Ops and planning leads being sold an AI tool</span>
+      <span class="chip audience">Planners and analysts who will run it</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:3">0-3 · Welcome</span>
+      <span class="a2" style="flex:15">3-18 · The arithmetic, the claim, the habit</span>
+      <span class="a3" style="flex:24">18-42 · Build-along: price it, write the memo</span>
+      <span class="a4" style="flex:3">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The last section of the playbook</h2>
+    </div>
+    <p class="lede">Northwick, the constructed homeware retailer, has five sections of its AI planning playbook written. The sixth is the one the finance director reads first: what the tool is worth, at what error cut it pays, and what would make it stop paying. Every input that belongs to Northwick is constructed and labelled on the simulator; every formula is the standard one, and the bench rungs use the error cut you measured on real data.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">Constructed Northwick example = invented, labelled every time</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A chain of five formulas from forecast error to money, a simulator that prices the vendor's claim, your own bench result and every combination in between, and the one number to take into the negotiation: the break-even error cut. Then the capstone: Northwick's playbook memo, and a strict scorecard on the whole thing.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The question, one last time<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The vendor says the forecast is 30 percent better. <strong>How much stock, service and cash does that actually move, and where does a spreadsheet still win?</strong> Session 1 answered the second half on real data: a spreadsheet still wins the steady cells. Tonight answers the first half in pounds.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The strongest public forecasting evidence, the M5 competition, reports the winner 22.4 percent better than the best benchmark on Walmart data, and 415 of 5,507 teams (7.5 percent) beating that benchmark at all. A 30 percent cut is a bigger claim than the improvement the winner reported there, on a different error measure and other people's data. It may still be true for yours. Tonight shows what it is worth if it is, and what it is worth if it is not.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers what a forecast-error cut is worth</span>
+      <h2>From one percent of error to pounds, in five lines</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A better forecast is worth nothing on its own. It is worth something when it moves stock: less safety stock for the same service, or better service for the same stock. Both paths run through the same formula you used in session 2, and both end in a number finance recognises.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The chain from forecast error to money. Forecast error sigma sets safety stock as z times sigma times the square root of lead time; safety stock times unit cost is cash in stock; cash times the holding rate is holding cost a year. Separately, sigma sets expected units short per order cycle through the normal loss function, and units short times margin is margin lost a year. Holding cost saved plus margin saved, minus the licence, is net value a year.">
+        <defs>
+          <filter id="s6aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="s6aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s6aH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s6aL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s6aS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s6aW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .s6aN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s6aH" x="40" y="28">WHERE A FORECAST-ERROR CUT TURNS INTO MONEY</text>
+
+        <g filter="url(#s6aSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="52" width="160" height="56" rx="8" transform="rotate(-0.6 120 80)" fill="#F2C200"/>
+          <rect x="250" y="52" width="180" height="56" rx="8" transform="rotate(0.5 340 80)" fill="#F2F5E8"/>
+          <rect x="480" y="52" width="160" height="56" rx="8" transform="rotate(-0.4 560 80)" fill="#F2F5E8"/>
+          <rect x="690" y="52" width="160" height="56" rx="8" transform="rotate(0.5 770 80)" fill="#F2F5E8"/>
+          <rect x="250" y="168" width="180" height="56" rx="8" transform="rotate(-0.5 340 196)" fill="#F2F5E8"/>
+          <rect x="480" y="168" width="160" height="56" rx="8" transform="rotate(0.4 560 196)" fill="#F2F5E8"/>
+          <rect x="690" y="168" width="160" height="56" rx="8" transform="rotate(-0.4 770 196)" fill="#3D5020"/>
+          <path d="M204 80 L244 80" marker-end="url(#s6aAr)"/>
+          <path d="M434 80 L474 80" marker-end="url(#s6aAr)"/>
+          <path d="M644 80 L684 80" marker-end="url(#s6aAr)"/>
+          <path d="M120 112 C120 196 200 196 244 196" marker-end="url(#s6aAr)"/>
+          <path d="M434 196 L474 196" marker-end="url(#s6aAr)"/>
+          <path d="M644 196 L684 196" marker-end="url(#s6aAr)"/>
+          <path d="M770 112 L770 162" marker-end="url(#s6aAr)"/>
+        </g>
+
+        <text class="s6aL" x="54" y="76">Forecast error</text>
+        <text class="s6aL" x="54" y="94">sigma, a week</text>
+        <text class="s6aL" x="264" y="76">Safety stock</text>
+        <text class="s6aS" x="264" y="94">z x sigma x sqrt(L)</text>
+        <text class="s6aL" x="494" y="76">Cash in stock</text>
+        <text class="s6aS" x="494" y="94">units x unit cost</text>
+        <text class="s6aL" x="704" y="76">Holding cost</text>
+        <text class="s6aS" x="704" y="94">cash x rate, a year</text>
+        <text class="s6aL" x="264" y="192">Units short</text>
+        <text class="s6aS" x="264" y="210">sigma x sqrt(L) x G(z)</text>
+        <text class="s6aL" x="494" y="192">Margin lost</text>
+        <text class="s6aS" x="494" y="210">short x margin, a year</text>
+        <text class="s6aW" x="704" y="192">Net a year</text>
+        <text class="s6aW" x="704" y="210">savings - licence</text>
+
+        <text class="s6aN" x="40" y="262">The tool moves only the yellow box. Every other box is arithmetic you can check.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - two paths from the same sigma: one through cash, one through units short</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The arithmetic, one line each<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <tr><th>Line</th><th>Formula</th><th>From</th></tr>
+          <tr><td>Safety stock</td><td>z x sigma x sqrt(L)</td><td>Session 2</td></tr>
+          <tr><td>Cash released</td><td>safety stock value before minus after</td><td>One-off, on the balance sheet</td></tr>
+          <tr><td>Holding cost saved</td><td>cash released x holding rate</td><td>Every year</td></tr>
+          <tr><td>Units short per order cycle</td><td>sigma x sqrt(L) x G(z), the standard normal loss function</td><td>The textbook fill-rate formula</td></tr>
+          <tr><td>Fill rate</td><td>1 - units short / order quantity</td><td>Session 2</td></tr>
+        </table>
+        <p>These are the standard forms in inventory texts such as Silver, Pyke and Thomas (4th edition, 2017). The simulator computes each one in your browser, and a Python reference recomputes them and agrees value by value.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Cash is once, the licence is every year<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Released safety stock is working capital: it comes back once, as cash, when you stop replenishing it. The licence is an annual cost. Comparing a one-off release with a recurring fee on the same line is the most common error in these cases, in both directions. The simulator keeps them apart: cash released on one meter, net value a year on another. How finance teams build the full return calculation, with discounting and risk, is taught in <a href="https://phoebefu6.github.io/learn-ai-finance-with-phoebe/courses/a5-roi-business-case.html">AI + Finance: the ROI business case ↗</a>.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the vendor claim against the bench</span>
+      <h2>The claim pays, the measurement does not, and the break-even sits between</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Run the same Northwick inputs with three error cuts: the vendor's 30 percent, the 2.7 percent the learned model achieved over the best spreadsheet method on 45 real SKUs, and the cut where the tool exactly pays for itself. The break-even is the number to take into the room.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Net value a year after the 250,000 pound licence for five rungs of the simulator, constructed Northwick inputs. Vendor claim, a 30 percent error cut: plus 354,727 pounds. Claim with 10 percent upward overrides: plus 114,727. Bank the measured cut as service: minus 140,879. The bench's measured 2.7 percent cut: minus 196,011. Only where the learned model wins: minus 209,081.">
+        <defs>
+          <filter id="s6bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="63" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s6bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+        </defs>
+        <style>
+          .s6bH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s6bL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s6bS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s6bV { font: 800 13px Inter, sans-serif; fill: #26330F; }
+          .s6bN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s6bH" x="40" y="28">NET VALUE A YEAR, AFTER THE LICENCE</text>
+        <text class="s6bS" x="330" y="28">Constructed Northwick inputs, five rungs of the simulator</text>
+
+        <g filter="url(#s6bSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M460 46 L460 274" stroke="#4F5842"/>
+          <rect x="460" y="56" width="325" height="28" rx="4" fill="#3D5020"/>
+          <rect x="460" y="101" width="105" height="28" rx="4" fill="#C9D6A8"/>
+          <rect x="331" y="146" width="129" height="28" rx="4" fill="url(#s6bHc)"/>
+          <rect x="280" y="191" width="180" height="28" rx="4" fill="#F2C200"/>
+          <rect x="268" y="236" width="192" height="28" rx="4" fill="url(#s6bHc)"/>
+        </g>
+
+        <text class="s6bL" x="40" y="75">Vendor claim, error -30%</text>
+        <text class="s6bL" x="40" y="120">Claim + upward overrides</text>
+        <text class="s6bL" x="40" y="165">Bank it as service</text>
+        <text class="s6bL" x="40" y="210">Bench: measured 2.7%</text>
+        <text class="s6bL" x="40" y="255">Only where it wins</text>
+
+        <text class="s6bV" x="795" y="75">+£354,727</text>
+        <text class="s6bV" x="575" y="120">+£114,727</text>
+        <text class="s6bV" x="472" y="165">-£140,879</text>
+        <text class="s6bV" x="472" y="210">-£196,011</text>
+        <text class="s6bV" x="472" y="255">-£209,081</text>
+
+        <text class="s6bN" x="40" y="302">Right of the line pays. Licence £250,000 a year; the one-off £150,000 set-up is not in these bars.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - only the vendor's own number clears the licence; the yellow bar is what was measured</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Break-even: the number to negotiate<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>At Northwick's constructed settings (4,000 SKUs, 95 percent cycle service, 4-week lead time, 25 percent holding rate, £250,000 a year), the simulator finds the tool breaks even at a <strong>12.4 percent</strong> cut in forecast error across every SKU. Below that it costs more than it saves; above it, it pays.</p>
+        <p>That turns a sales conversation into a test. You do not need to know whether the vendor's 30 percent is true. You need to know whether their tool beats your best spreadsheet method by more than 12.4 percent on your own held-out weeks. If they will not run that pilot, that is information too.</p>
+        <div class="callout tip">
+          <p><strong>The break-even moves with every lever.</strong> Restrict the tool to the cells where it wins and the break-even rises to 22.9 percent, because the same licence is spread over fewer SKUs. A longer lead time or a higher service target lowers it, because there is more stock for the cut to release.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Bank it as cash, or bank it as service<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A smaller error can buy two different things. <strong>Cash:</strong> keep the 95 percent service target and hold less safety stock. <strong>Service:</strong> keep today's stock and let the service level rise. On the "Bank it as service" rung, the measured cut on the cells where the learned model wins lifts cycle service to 95.3 percent and fill rate to 99.0 percent (from 98.9), and the margin no longer lost is worth more than the cash path would release. It still does not clear the licence.</p>
+        <p>Decide which one you are buying before the pilot starts. A vendor reporting "service up" and finance expecting "stock down" will both be disappointed by the same result.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers what override habits do to the case</span>
+      <h2>An upward habit parks the savings back on the shelf</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">Session 5 measured what a blanket upward override does to accuracy. Here is what it does to cash. Under an order-up-to policy, a forecast that leans high by a share b raises the target level by b x weekly demand x (lead time + 1). That stock is bought, stored and insured, and no service metric notices it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Safety stock value at Northwick, constructed inputs. Today: 3,473,931 pounds. With the vendor's 30 percent error cut: 2,431,752 pounds. With the same cut and planners adding 10 percent to every forecast: the same 2,431,752 plus 960,000 pounds parked by the upward bias, 3,391,752 in total.">
+        <defs>
+          <filter id="s6cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="67" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s6cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+        </defs>
+        <style>
+          .s6cH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s6cL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s6cS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s6cV { font: 800 14px Inter, sans-serif; fill: #26330F; }
+          .s6cN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s6cH" x="40" y="28">STOCK ON THE SHELF, THREE WAYS</text>
+        <text class="s6cS" x="290" y="28">Constructed Northwick example, cash mode</text>
+
+        <g filter="url(#s6cSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M80 250 L800 250" stroke="#4F5842"/>
+          <rect x="140" y="70" width="140" height="180" rx="4" fill="url(#s6cHc)"/>
+          <rect x="370" y="124" width="140" height="126" rx="4" fill="url(#s6cHc)"/>
+          <rect x="600" y="124" width="140" height="126" rx="4" fill="url(#s6cHc)"/>
+          <rect x="600" y="74" width="140" height="50" rx="4" fill="#F2C200"/>
+        </g>
+
+        <text class="s6cV" x="210" y="60" text-anchor="middle">£3,473,931</text>
+        <text class="s6cV" x="440" y="114" text-anchor="middle">£2,431,752</text>
+        <text class="s6cV" x="670" y="64" text-anchor="middle">£3,391,752</text>
+        <text class="s6cL" x="670" y="104" text-anchor="middle">£960,000 parked</text>
+
+        <text class="s6cL" x="210" y="272" text-anchor="middle">Today</text>
+        <text class="s6cL" x="440" y="272" text-anchor="middle">Error cut 30%</text>
+        <text class="s6cL" x="670" y="272" text-anchor="middle">Cut 30% + overrides +10%</text>
+
+        <text class="s6cN" x="40" y="298">The overrides hand back £960,000 of the £1,042,179 the cut released. Net a year falls to £114,727.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the yellow block is stock bought because people did not trust the number</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the override rule belongs in the business case<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>On the "Claim + upward overrides" rung, the vendor's 30 percent cut is real, and planners add 10 percent to every forecast because they do not yet trust it. Cash released falls from £1,042,179 to £82,179. Net value a year falls from £354,727 to £114,727, and payback stretches from 5.1 to 15.7 months. The break-even error cut rises to 24.3 percent.</p>
+        <p>The research behind session 5 is why this is not a cartoon. Fildes and colleagues report, from the abstract of their 2009 study of more than 60,000 forecasts, that upward adjustments were much less likely to improve accuracy than downward ones. Dietvorst and colleagues found that people use an imperfect algorithm more readily when they can modify it slightly. Put together: allow small, logged, bounded overrides, and price the habit you expect.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the simulator leaves out<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Bias in the tool itself.</strong> Session 1's learned model ran 17.3 percent short. The simulator assumes the error spread shrinks in proportion to WAPE and that the tool is unbiased. A tool that leans low releases cash and quietly costs service.</li>
+          <li><strong>Cycle stock and markdowns.</strong> Only safety stock and units short are priced. A better forecast can also cut end-of-season markdowns, which can be larger. Add that line only with your own markdown data.</li>
+          <li><strong>Planner time.</strong> Hours saved are real and are left out, because they are rarely released as cash. If they are, add them; if they are not, do not count them.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Price Northwick's tool, then write the memo</h2>
+      <span class="tag demo">★ 24 min · everyone builds</span>
+    </div>
+    <p class="lede">The simulator below follows the five lines of Part 1 for Northwick's 4,000 SKUs. The rungs set the levers for you; then the sliders are yours. Every Northwick input is constructed and listed under the simulator; the "bench" rungs use the error cut measured on real data in session 1.</p>
+
+    <div id="asc-case"></div>
+
+    <div class="steps">
+      <div class="step"><p><strong>Read today.</strong> The simulator opens on "Today, no tool": safety stock <strong>£3,473,931</strong> buys a 95 percent cycle service level and a 98.9 percent fill rate. The break-even meter already reads <strong>12.4%</strong>: the cut a tool at £250,000 a year would need.</p></div>
+      <div class="step"><p><strong>Run the vendor's claim.</strong> Click "Vendor claim: error -30%". Cash released <strong>£1,042,179</strong>, net value <strong>£354,727</strong> a year, set-up paid back in <strong>5.1 months</strong>. If the claim is true on Northwick's data, this is a good deal.</p>
+        <div class="prompt-box good"><span class="label">★ The claim, priced</span>
+error cut 30%: cash released £1,042,179 (once)
+holding saved £260,545 + margin saved £344,183 - licence £250,000
+= net £354,727 a year, payback 5.1 months</div></div>
+      <div class="step"><p><strong>Run what you measured.</strong> Click "The bench: measured cut". The slider moves to <strong>2.7%</strong>, the learned model's measured improvement over the best spreadsheet method on 45 real SKUs. Cash released £93,044; net <strong>-£196,011</strong> a year; the set-up never pays back.</p>
+        <div class="prompt-box good"><span class="label">★ The bench, priced</span>
+error cut 2.7% (measured, session 1): cash released £93,044
+net -£196,011 a year: the licence costs more than the cut saves
+break-even cut at these settings: 12.4%</div></div>
+      <div class="step"><p><strong>Restrict it to where it wins.</strong> Click "Only where it wins". The tool now plans the 54% of SKUs in the six cells where it beat the spreadsheet, at their measured 3.7% cut. Net <strong>-£209,081</strong>; break-even rises to <strong>22.9%</strong>. Spreading the same licence over fewer SKUs makes it harder to pay for.</p></div>
+      <div class="step"><p><strong>Bank it as service, then add the habit.</strong> Click "Bank it as service": cycle service 95.3 percent, net -£140,879. Then "Claim + upward overrides": the vendor's cut with planners adding 10 percent: £960,000 parked back on the shelf, net £114,727, payback 15.7 months.</p></div>
+      <div class="step"><p><strong>Find your own setting.</strong> Use the sliders. Try a 12-week lead time, a 98 percent service target, or a cheaper licence, and watch the break-even move. Write down the combination that makes the case, and the one that breaks it.</p></div>
+      <div class="step"><p><strong>Write the memo.</strong> Press "Write Northwick's playbook memo from these numbers" under the simulator. It unlocks at 4 passport stamps, with a link to open it anyway. Copy it into section 6, then score the whole playbook on the final scorecard below.</p>
+        <div class="prompt-box good"><span class="label">★ Playbook section 6 · the business case</span>
+The vendor claims a 30% cut in forecast error. At our settings the
+tool breaks even at 12.4%. Our bench measured 2.7% over our best
+spreadsheet method on real demand, winning 6 of 9 segments.
+Decision rule: we sign only if a pilot beats our best spreadsheet
+method by more than the break-even cut, on our own held-out weeks.
+We decide before the pilot whether we bank the gain as cash or as
+service, and the override rules (section 5) apply from day one.
+Owner: the operations director, with the finance director.
+Constructed Northwick example. Re-verify vendor pricing before you sign.</div></div>
+    </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Northwick's AI planning playbook, complete: six sections done. Tonight's section 6, the business case, states the break-even cut of 12.4 percent, the bench's measured 2.7 percent, the pilot decision rule, the cash or service choice, and the owners.">
+        <defs>
+          <filter id="s6dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="69" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="s6dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s6dH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s6dL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s6dS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s6dA { font: 700 11px Inter, sans-serif; fill: #3D5020; }
+          .s6dN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s6dH" x="40" y="28">NORTHWICK'S AI PLANNING PLAYBOOK</text>
+        <text class="s6dS" x="310" y="28">constructed, one page, complete</text>
+
+        <g filter="url(#s6dSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="40" width="360" height="226" rx="6" transform="rotate(-0.5 220 153)" fill="#FFFFFF"/>
+          <rect x="54" y="52" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#CDD3BF"/>
+          <rect x="54" y="88" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#CDD3BF"/>
+          <rect x="54" y="124" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#CDD3BF"/>
+          <rect x="54" y="160" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#CDD3BF"/>
+          <rect x="54" y="196" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#CDD3BF"/>
+          <rect x="54" y="232" width="332" height="26" rx="4" fill="#F2F5E8" stroke="#3D5020"/>
+          <path d="M392 245 C424 245 420 160 436 160" marker-end="url(#s6dAr)"/>
+          <rect x="444" y="52" width="410" height="206" rx="10" transform="rotate(0.4 649 155)" fill="#F2F5E8"/>
+        </g>
+
+        <text class="s6dL" x="66" y="72">1 · Forecast-error budget</text>
+        <text class="s6dS" x="376" y="72" text-anchor="end">done</text>
+        <text class="s6dL" x="66" y="108">2 · Stock policy</text>
+        <text class="s6dS" x="376" y="108" text-anchor="end">done</text>
+        <text class="s6dL" x="66" y="144">3 · Allocation rules</text>
+        <text class="s6dS" x="376" y="144" text-anchor="end">done</text>
+        <text class="s6dL" x="66" y="180">4 · Disruption playbook</text>
+        <text class="s6dS" x="376" y="180" text-anchor="end">done</text>
+        <text class="s6dL" x="66" y="216">5 · Override rules</text>
+        <text class="s6dS" x="376" y="216" text-anchor="end">done</text>
+        <text class="s6dL" x="66" y="250">6 · Business case</text>
+        <text class="s6dA" x="376" y="250" text-anchor="end">tonight</text>
+
+        <text class="s6dH" x="462" y="80">TONIGHT'S SECTION</text>
+        <text class="s6dL" x="462" y="106">Break-even cut: 12.4% at our settings.</text>
+        <text class="s6dL" x="462" y="130">Bench measured 2.7%: not yet.</text>
+        <text class="s6dL" x="462" y="154">Pilot must beat break-even on our weeks.</text>
+        <text class="s6dL" x="462" y="178">Cash or service: decided before the pilot.</text>
+        <text class="s6dL" x="462" y="202">Override rules apply from day one.</text>
+        <text class="s6dL" x="462" y="236">Owners: operations and finance.</text>
+
+        <text class="s6dN" x="40" y="290">Six sections, one page. Every number in it is either measured or labelled constructed.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the playbook ends with a test the vendor can pass, not a verdict on the vendor</figcaption>
+    </figure>
+
+    <div class="scorecard" data-strict="1" data-title="Final scorecard: would you sign Northwick's playbook?" data-foot="Strict on purpose: a playbook with one row at 0 is not ready, however good the total.">
+      <div class="sc-row"><div class="sc-q">The error budget names the bar to beat per segment and keeps the sign<em>Best spreadsheet method, measured on held-out weeks. Never naive.</em></div></div>
+      <div class="sc-row"><div class="sc-q">The stock policy sizes safety stock from our own error and checks it on weeks it never saw<em>Target and achieved service, per ABC class.</em></div></div>
+      <div class="sc-row"><div class="sc-q">Allocation and disruption rules are written down with a floor, a tie-break and what we share<em>Sell-through, weekly, one definition.</em></div></div>
+      <div class="sc-row"><div class="sc-q">Every override carries a reason code and a size, and is scored for value added monthly<em>Upward overrides need a second sign-off.</em></div></div>
+      <div class="sc-row"><div class="sc-q">The business case states the break-even cut and the pilot rule, and every constructed input has a date to be replaced<em>Cash and service never on the same line.</em></div></div>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>After session 6</h2>
+      <span class="tag exercise">45 min</span>
+    </div>
+    <ol>
+      <li><strong>Replace the constructed inputs.</strong> Put your own SKU count, weekly demand, unit cost, margin, lead time, holding rate and quoted licence into the sliders. Write down your break-even cut.</li>
+      <li><strong>Measure your own cut.</strong> Repeat session 1 on your data: your best spreadsheet method per segment against the candidate tool, on weeks neither saw. Compare the result with your break-even.</li>
+      <li><strong>Price your habit.</strong> Estimate your team's average override, with the sign, from last quarter. Set the override slider to it and read what it parks on the shelf.</li>
+      <li><strong>Grade yourself on the final scorecard</strong> and fix the lowest row before anyone sees the playbook.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and session 6 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · At Northwick's settings the vendor's 30 percent cut nets £354,727 a year and the measured 2.7 percent nets -£196,011. What should the playbook ask the vendor for?</p>
+      <button class="qopt" type="button">A · A discount large enough to make the 2.7 percent case positive</button>
+      <button class="qopt" type="button">B · A pilot showing a cut above the 12.4 percent break-even against our best spreadsheet method, on our own held-out weeks</button>
+      <button class="qopt" type="button">C · A written guarantee of the 30 percent</button>
+      <p class="qwhy">The break-even turns a disputed claim into a test. Neither number has to be taken on trust: the pilot either clears 12.4 percent on Northwick's data or it does not.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Restricting the tool to the six cells where it wins raises the break-even from 12.4 to 22.9 percent. Why?</p>
+      <button class="qopt" type="button">A · The learned model is worse in those cells</button>
+      <button class="qopt" type="button">B · The service target is higher in those cells</button>
+      <button class="qopt" type="button">C · The same licence is paid from savings on 54 percent of the SKUs, so each must save more</button>
+      <p class="qwhy">The licence does not shrink with coverage. Planning fewer SKUs means less safety stock for the cut to release, so the cut needed to pay the same fee rises.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · With the vendor's cut and a 10 percent upward override on every forecast, cash released falls from £1,042,179 to £82,179. Where did the rest go?</p>
+      <button class="qopt" type="button">A · £960,000 of extra stock bought because the forecast was raised, under an order-up-to policy</button>
+      <button class="qopt" type="button">B · Into a higher service level the business asked for</button>
+      <button class="qopt" type="button">C · Into the licence fee</button>
+      <p class="qwhy">A forecast that leans high by 10 percent raises the target level by 10 percent of weekly demand times lead time plus one. It is stock on a shelf, not service anyone measured.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ OFFICIAL COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Safety stock, fill rate and the normal loss function</span><span class="note">Standard inventory formulas (Silver, Pyke and Thomas, 4th ed. 2017), computed in the browser and by a Python reference</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The session 1 bench</span><span class="note">2.7 percent over the best spreadsheet method on 45 real UCI Online Retail II SKUs; 6 of 9 cells</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">M5 accuracy competition</span><span class="note">22.4 percent for the winner over the best benchmark; 7.5 percent of teams beat it. From the 2020 preprint</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Fildes et al. 2009 and Dietvorst et al. 2018</span><span class="note">Adjustment direction and the "modify slightly" finding, as in session 5 (Fildes from the abstract)</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Vendor claims and pricing</span><span class="note">The 30 percent and the £250,000 licence are constructed; consultancy ranges reported only. Re-verify before you sign</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">ROI method for finance</span><span class="note">Linked, not retaught: AI + Finance a5 owns the full business-case method</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 6 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Five lines</b><span>Error to safety stock to cash to holding cost; error to units short to margin.</span></div>
+      <div class="cheat-item"><b>Cash vs licence</b><span>Released stock is once. The licence is every year. Never one line.</span></div>
+      <div class="cheat-item"><b>Break-even</b><span>12.4 percent at Northwick's settings. Negotiate the pilot, not the claim.</span></div>
+      <div class="cheat-item"><b>Coverage</b><span>Fewer SKUs, same licence: break-even 22.9 percent.</span></div>
+      <div class="cheat-item"><b>The habit</b><span>+10 percent overrides park £960,000 of the £1,042,179 released.</span></div>
+      <div class="cheat-item"><b>Cash or service</b><span>Decide which you are buying before the pilot starts.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">What you now own</span>
+    <p>A one-page AI planning playbook with six sections, every number in it either measured on real demand or labelled constructed, and a test the vendor can pass or fail on your own weeks. Every forecast is wrong. You now know what each kind of wrong costs, and what a tool would have to do to be worth its price.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Session 6 of 6 · learn-ai-supply-chain-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="05-when-the-planner-is-right.html">← Prev: When the planner is right: overrides and trust</a> &nbsp;·&nbsp; <a href="../index.html">Course home</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/asc-sample.js?v=1"></script>
+<script src="../assets/asc-live.js?v=1"></script>
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

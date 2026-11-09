@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Session 2 of 6. Turn forecast error into stock: safety stock from error and lead time, cycle service level vs fill rate, the newsvendor trade-off, and a tiered stock policy checked live on 45 real SKUs.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="From forecast to stock: safety stock and service level - learn ai supply chain with phoebe">
+<meta property="og:description" content="Session 2 of 6. A policy that promised 98 percent on A items delivered 97.4 percent on weeks it never saw. Error measured on the past understates the next error.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/courses/02-from-forecast-to-stock.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="From forecast to stock: safety stock and service level - learn ai supply chain with phoebe">
+<meta name="twitter:description" content="Session 2 of 6. Service level is a price, not a virtue. Size the buffer from your own error, then check it on weeks it never saw.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-ai-supply-chain-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Session 2 · From forecast to stock: safety stock and service level - learn ai supply chain with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-supply-chain-with-phoebe</a> / Session 2 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI + Supply Chain with Phoebe · Session 2 of 6</div>
+    <h1>From forecast to stock: <span class="accent">safety stock and service level</span></h1>
+    <p class="sub">Session 1 measured how wrong each forecast is. Tonight that error becomes something you can count on a shelf and in a budget: a buffer sized from the error, the lead time and the service level you decide to buy. You set a stock policy for 45 real SKUs, then watch it meet 26 weeks it never saw, and write section 2 of Northwick's AI planning playbook.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Medium</span>
+      <span class="chip audience">Ops and planning leads being sold an AI tool</span>
+      <span class="chip audience">Planners and analysts who will run it</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:3">0-3 · Welcome</span>
+      <span class="a2" style="flex:17">3-20 · Error becomes stock</span>
+      <span class="a3" style="flex:22">20-42 · Build-along: Northwick's stock policy</span>
+      <span class="a4" style="flex:3">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The error budget gets spent</h2>
+    </div>
+    <p class="lede">Last session ended with a forecast-error budget: how far each forecaster misses, which way it leans, and on which SKUs. Tonight <strong>that budget is spent on stock</strong>. Every unit of spread becomes a unit of buffer on a shelf in DC North or DC South, and every point of service you promise has a price you can read in pounds.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">Constructed Northwick example = invented, labelled every time</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The safety stock formula read one term at a time, the difference between the two service numbers a vendor and a planner will each quote at you, a one-line way to decide how much service is worth buying, and a live check of what a tiered policy really delivers on weeks it never saw. Then section 2 of Northwick's playbook: the stock policy, with an owner.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Where tonight sits in the six<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The question across all six sessions stays the same: the vendor says the forecast is 30 percent better, so <strong>how much stock, service and cash does that actually move, and where does a spreadsheet still win?</strong> Tonight is the first half of the answer, the link from error to stock. Session 6 prices it.</p>
+        <p>Two numbers from session 1 travel with us. The best spreadsheet method, the 8-week average, misses by 79.6 percent WAPE. The learned model misses by 77.5 percent and runs 17.3 percent short. Hold on to that minus sign: tonight it costs service.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers safety stock from error and lead time</span>
+      <h2>A buffer is the error, priced</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">You order the forecast plus a buffer. The buffer exists because the forecast misses, so its size comes from <strong>how far it misses (sigma)</strong>, <strong>how much of the miss you choose to cover (z)</strong> and <strong>how long you wait for the next delivery (lead time, L)</strong>. Three dials, one line: safety stock = z x sigma x sqrt(L).</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four panels left to right. One: a forecaster's own one-week errors scatter above and below zero; their spread is sigma. Two: those errors make a bell curve around the forecast; z sets how far into the right tail you cover, 1.645 for 95 percent and 2.054 for 98 percent; the uncovered yellow tail is a stockout. Three: with a lead time of 6 weeks instead of 2 the curve is 1.73 times wider, because weekly errors add in variance. Four: the result sits on the shelf as a yellow buffer above the cycle stock; on 45 real SKUs a flat 95 percent policy is worth GBP 11,854.">
+        <defs>
+          <filter id="s2aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="31" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s2aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s2aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s2aH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s2aL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s2aS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s2aB { font: 800 11px Inter, sans-serif; fill: #5E4500; }
+          .s2aA { font: 700 11px Inter, sans-serif; fill: #3D5020; }
+          .s2aN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s2aH" x="30" y="30">1 · THE ERROR, FROM S1</text>
+        <text class="s2aH" x="270" y="30">2 · Z PICKS THE TAIL</text>
+        <text class="s2aH" x="540" y="30">3 · TIMES SQRT(L)</text>
+        <text class="s2aH" x="720" y="30">4 · ON THE SHELF</text>
+
+        <g filter="url(#s2aSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="44" width="200" height="190" rx="8" transform="rotate(-0.4 130 139)" fill="#FFFFFF"/>
+          <rect x="270" y="44" width="230" height="190" rx="8" transform="rotate(0.3 385 139)" fill="#FFFFFF"/>
+          <rect x="540" y="44" width="150" height="190" rx="8" transform="rotate(-0.3 615 139)" fill="#FFFFFF"/>
+          <rect x="720" y="44" width="130" height="190" rx="8" transform="rotate(0.4 785 139)" fill="#F2F5E8"/>
+          <path d="M45 130 L215 130" stroke="#3D5020" stroke-dasharray="7 5"/>
+          <path d="M55 130 L55 100 M76 130 L76 150 M97 130 L97 118 M118 130 L118 165 M139 130 L139 92 M160 130 L160 140 M181 130 L181 124 M202 130 L202 158" stroke="#5C7330" stroke-width="1.6"/>
+          <circle cx="55" cy="100" r="5" fill="url(#s2aHc)"/>
+          <circle cx="76" cy="150" r="5" fill="url(#s2aHc)"/>
+          <circle cx="97" cy="118" r="5" fill="url(#s2aHc)"/>
+          <circle cx="118" cy="165" r="5" fill="url(#s2aHc)"/>
+          <circle cx="139" cy="92" r="5" fill="url(#s2aHc)"/>
+          <circle cx="160" cy="140" r="5" fill="url(#s2aHc)"/>
+          <circle cx="181" cy="124" r="5" fill="url(#s2aHc)"/>
+          <circle cx="202" cy="158" r="5" fill="url(#s2aHc)"/>
+          <path d="M236 139 L262 139" marker-end="url(#s2aAr)"/>
+          <path d="M285 200 L485 200" stroke="#4F5842"/>
+          <path d="M451 181 C462 192 472 199 485 200 L451 200 Z" fill="#F2C200"/>
+          <path d="M285 200 C340 200 355 80 385 80 C415 80 430 200 485 200"/>
+          <path d="M385 82 L385 200" stroke="#3D5020" stroke-dasharray="5 4"/>
+          <path d="M451 124 L451 200" stroke="#26330F"/>
+          <path d="M390 192 L446 192" stroke="#3D5020" stroke-width="1.6"/>
+          <path d="M506 139 L532 139" marker-end="url(#s2aAr)"/>
+          <path d="M550 200 L680 200" stroke="#4F5842"/>
+          <path d="M575 200 C600 200 605 90 615 90 C625 90 630 200 655 200"/>
+          <path d="M546 200 C590 200 597 136 615 136 C633 136 640 200 684 200" stroke="#3D5020" stroke-dasharray="6 4"/>
+          <path d="M694 139 L714 139" marker-end="url(#s2aAr)"/>
+          <path d="M730 214 L840 214" stroke-width="2.6"/>
+          <rect x="740" y="150" width="90" height="62" rx="4" transform="rotate(0.4 785 181)" fill="#FFFFFF"/>
+          <rect x="740" y="104" width="90" height="44" rx="4" transform="rotate(-0.5 785 126)" fill="#F2C200"/>
+        </g>
+
+        <text class="s2aS" x="44" y="62">above: sold more</text>
+        <text class="s2aS" x="44" y="222">below: sold less</text>
+        <text class="s2aL" x="30" y="256">sigma = their spread</text>
+        <text class="s2aS" x="30" y="274">each forecaster's own errors</text>
+
+        <text class="s2aL" x="282" y="62">covered weeks</text>
+        <text class="s2aB" x="458" y="172">short</text>
+        <text class="s2aS" x="418" y="184" text-anchor="middle">z x sigma</text>
+        <text class="s2aS" x="385" y="218" text-anchor="middle">forecast</text>
+        <text class="s2aL" x="270" y="256">z sets the tail you accept</text>
+        <text class="s2aS" x="270" y="274">95%: z 1.645 · 98%: z 2.054</text>
+
+        <text class="s2aL" x="552" y="64">L 2: solid</text>
+        <text class="s2aA" x="552" y="80">L 6: dashed, 1.73x</text>
+        <text class="s2aL" x="540" y="256">x sqrt(L)</text>
+        <text class="s2aS" x="540" y="274">errors add in variance</text>
+
+        <text class="s2aS" x="785" y="66" text-anchor="middle">units x price</text>
+        <text class="s2aL" x="785" y="131" text-anchor="middle">buffer</text>
+        <text class="s2aS" x="785" y="186" text-anchor="middle">cycle stock</text>
+        <text class="s2aL" x="720" y="256">= value on bench</text>
+        <text class="s2aS" x="720" y="274">GBP 11,854 at 95%</text>
+
+        <text class="s2aN" x="30" y="304">More error, a higher target or a longer wait: each one makes the same buffer bigger.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the buffer is the forecaster's own error, cut at a chosen tail and stretched by lead time</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The formula, one term at a time<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <tr><th>Term</th><th>What it is</th><th>Who sets it</th></tr>
+          <tr><td><strong>z</strong></td><td>How many sigmas of error you cover. At a 95 percent cycle service level z is <strong>1.645</strong>; at 98 percent it is <strong>2.054</strong>. Three more points of service cost a quarter more buffer.</td><td>The business, as a price decision (Part 3)</td></tr>
+          <tr><td><strong>sigma</strong></td><td>The forecaster's <strong>own</strong> one-week error spread, measured on weeks before the holdout. A better forecaster has a smaller sigma, which is the only way forecast accuracy turns into less stock.</td><td>The forecast, measured, never assumed</td></tr>
+          <tr><td><strong>sqrt(L)</strong></td><td>Lead time in weeks, square-rooted. You are exposed to every week of error until the next delivery lands.</td><td>The supplier and the transport plan</td></tr>
+        </table>
+        <p><strong>Why the square root.</strong> If each week's error is independent of the last, the errors over L weeks add up in <em>variance</em>, not in sigma. Variance over L weeks is L x sigma squared, so the spread is sigma x sqrt(L). Double the lead time and the buffer grows by about 1.41x, not 2x. Errors that run in streaks break this assumption and need more stock than the formula says.</p>
+        <p>How sigma itself is measured, and why on a holdout, belongs to <a href="https://phoebefu6.github.io/learn-timeseries-forecasting-with-phoebe/courses/a5-measuring-forecasts.html">Timeseries Forecasting: measuring a forecast ↗</a>. Here it is used, not retaught.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>On the 45 real UCI SKUs, a flat 95 percent target with sigma from the 8-week average and a 2-week lead time gives safety stock worth <strong>GBP 11,854</strong>. Checked one week ahead on the 1,170 SKU-weeks of the holdout, it covered <strong>93.3 percent</strong>: A items 96.4 percent, C items 89.0 percent. Same target, very different delivery by class. You will reproduce this in the build-along.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Bias is not in the formula<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The formula adds a symmetric buffer to the forecast. It assumes the forecast is right on average. Session 1's learned model is not: it runs <strong>17.3 percent short</strong>. A buffer sized on spread is placed on top of a forecast that already sits low, so the lean eats part of the buffer every single week before any random miss arrives.</p>
+        <p>That is why the build-along's learned-model rung buys cheaper stock (its sigma is smaller) and delivers less service. Sizing cannot fix a lean. The order is: correct the level first, then size the buffer on what is left. And check the result the way session 1 checked accuracy, on weeks the policy never saw, because the holdout is the only place where the lean and the spread show up together.</p>
+        <div class="callout tip">
+          <p><strong>A second reason the learned model looks cheap.</strong> On the bench its sigma is measured on weeks 52 to 77, which it was also trained on. A model's error on its own training weeks flatters it. Measure sigma on weeks the model did not learn from.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers cycle service level vs fill rate</span>
+      <h2>Two service numbers, one shelf</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">"98 percent service" is two different promises depending on what is counted. <strong>Cycle service level</strong> counts order cycles that had no stockout at all. <strong>Fill rate</strong> counts units served out of units wanted. One short cycle can cost ten points on the first and less than one on the second.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 324" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A constructed strip of ten order cycles. Nine cycles want 100 units and get 100. Cycle 7 wants 108 and gets 100, 8 units short. Cycle service level counts 9 of 10 cycles without a stockout, 90 percent. Fill rate counts 1,000 units served of 1,008 wanted, 99.2 percent.">
+        <defs>
+          <filter id="s2bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="37" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s2bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s2bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s2bH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s2bL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s2bS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s2bB { font: 800 11px Inter, sans-serif; fill: #5E4500; }
+          .s2bV { font: 800 18px Inter, sans-serif; fill: #26330F; }
+          .s2bN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s2bH" x="60" y="28">TEN ORDER CYCLES, TWO COUNTERS</text>
+        <text class="s2bS" x="330" y="28">constructed strip, your numbers will differ</text>
+
+        <text class="s2bS" x="95" y="56" text-anchor="middle">c1</text>
+        <text class="s2bS" x="173" y="56" text-anchor="middle">c2</text>
+        <text class="s2bS" x="251" y="56" text-anchor="middle">c3</text>
+        <text class="s2bS" x="329" y="56" text-anchor="middle">c4</text>
+        <text class="s2bS" x="407" y="56" text-anchor="middle">c5</text>
+        <text class="s2bS" x="485" y="56" text-anchor="middle">c6</text>
+        <text class="s2bS" x="563" y="56" text-anchor="middle">c7</text>
+        <text class="s2bS" x="641" y="56" text-anchor="middle">c8</text>
+        <text class="s2bS" x="719" y="56" text-anchor="middle">c9</text>
+        <text class="s2bS" x="797" y="56" text-anchor="middle">c10</text>
+
+        <g filter="url(#s2bSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="60" y="64" width="70" height="66" rx="6" transform="rotate(-0.6 95 97)" fill="#F2F5E8"/>
+          <rect x="138" y="64" width="70" height="66" rx="6" transform="rotate(0.5 173 97)" fill="#F2F5E8"/>
+          <rect x="216" y="64" width="70" height="66" rx="6" transform="rotate(-0.4 251 97)" fill="#F2F5E8"/>
+          <rect x="294" y="64" width="70" height="66" rx="6" transform="rotate(0.6 329 97)" fill="#F2F5E8"/>
+          <rect x="372" y="64" width="70" height="66" rx="6" transform="rotate(-0.5 407 97)" fill="#F2F5E8"/>
+          <rect x="450" y="64" width="70" height="66" rx="6" transform="rotate(0.4 485 97)" fill="#F2F5E8"/>
+          <rect x="528" y="64" width="70" height="66" rx="6" transform="rotate(-0.6 563 97)" fill="#F2C200"/>
+          <rect x="606" y="64" width="70" height="66" rx="6" transform="rotate(0.5 641 97)" fill="#F2F5E8"/>
+          <rect x="684" y="64" width="70" height="66" rx="6" transform="rotate(-0.4 719 97)" fill="#F2F5E8"/>
+          <rect x="762" y="64" width="70" height="66" rx="6" transform="rotate(0.6 797 97)" fill="#F2F5E8"/>
+          <path d="M240 140 L240 170" marker-end="url(#s2bAr)"/>
+          <path d="M646 140 L646 170" marker-end="url(#s2bAr)"/>
+          <rect x="60" y="180" width="360" height="84" rx="10" transform="rotate(-0.4 240 222)" fill="#FFFFFF"/>
+          <rect x="460" y="180" width="372" height="84" rx="10" transform="rotate(0.4 646 222)" fill="#FFFFFF"/>
+        </g>
+
+        <text class="s2bL" x="95" y="94" text-anchor="middle">100/100</text>
+        <text class="s2bL" x="173" y="94" text-anchor="middle">100/100</text>
+        <text class="s2bL" x="251" y="94" text-anchor="middle">100/100</text>
+        <text class="s2bL" x="329" y="94" text-anchor="middle">100/100</text>
+        <text class="s2bL" x="407" y="94" text-anchor="middle">100/100</text>
+        <text class="s2bL" x="485" y="94" text-anchor="middle">100/100</text>
+        <text class="s2bL" x="563" y="94" text-anchor="middle">100/108</text>
+        <text class="s2bL" x="641" y="94" text-anchor="middle">100/100</text>
+        <text class="s2bL" x="719" y="94" text-anchor="middle">100/100</text>
+        <text class="s2bL" x="797" y="94" text-anchor="middle">100/100</text>
+        <text class="s2bS" x="60" y="152">served/wanted</text>
+        <text class="s2bL" x="563" y="114" text-anchor="middle">8 short</text>
+
+        <text class="s2bH" x="80" y="204">CYCLE SERVICE LEVEL</text>
+        <text class="s2bS" x="80" y="222">cycles with no stockout</text>
+        <text class="s2bV" x="80" y="252">9 of 10 = 90%</text>
+        <text class="s2bH" x="480" y="204">FILL RATE</text>
+        <text class="s2bS" x="480" y="222">units served of units wanted</text>
+        <text class="s2bV" x="480" y="252">1,000 of 1,008 = 99.2%</text>
+
+        <text class="s2bN" x="60" y="292">One short cycle: cycle service level drops 10 points, fill rate drops under 1. Same shelf.</text>
+        <text class="s2bN" x="60" y="314">Constructed: 100 units wanted a cycle, 108 in cycle 7, 100 on hand every cycle.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - cycle service level counts bad cycles; fill rate counts missing units, and it is always the kinder number</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The two definitions, side by side<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <tr><th></th><th>Cycle service level</th><th>Fill rate</th></tr>
+          <tr><td><strong>Counts</strong></td><td>Order cycles with no stockout, out of all cycles</td><td>Units served from stock, out of units wanted</td></tr>
+          <tr><td><strong>Ignores</strong></td><td>How big the stockout was: 1 unit short and 100 short score the same</td><td>How often it happened: many small misses can still read 99 percent</td></tr>
+          <tr><td><strong>Answers</strong></td><td>How often does a customer meet an empty shelf?</td><td>What share of demand did we serve?</td></tr>
+          <tr><td><strong>Drives z</strong></td><td>Directly: z = the normal quantile of the target</td><td>Indirectly, through expected units short per cycle</td></tr>
+        </table>
+        <p>The stock widget in the build-along counts weeks, so its "achieved" is a cycle service level: of 1,170 SKU-weeks, how many were fully covered. It does not say how many units were missing in the weeks that were not.</p>
+        <div class="callout tip">
+          <p><strong>The one-line test.</strong> When anyone quotes a service level, ask: cycles or units? Then ask: measured on which weeks?</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why vendors and planners quote different ones<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Both measures are standard. Silver, Pyke and Thomas (<em>Inventory and Production Management in Supply Chains</em>, 4th edition, CRC Press, 2017) teach them side by side, along with the expected units short per cycle, sigma_L x G(k), that connects them. The formulas here are the standard textbook forms, used rather than quoted.</p>
+        <p>Because fill rate is always at least as high as cycle service level for the same stock, a sales deck tends to quote fill rate and a store manager tends to feel cycle service level: she sees empty shelves, not missing percentages. Neither is wrong. A planning team that does not say which one it targets will argue for months about a gap that is only a definition.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The bench's flat 95 percent policy delivered a cycle service level of 89.0 percent on the real C items: roughly one week in nine with some shortfall. For a cheap, slow C item a short week is often a few units, so its fill rate would read much higher. Which number goes in the playbook decides whether C items look broken or fine.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the newsvendor trade-off</span>
+      <h2>How much service is worth buying</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">Every unit you stock is a bet in one direction or the other. Stock one too few and you lose its margin. Stock one too many and you pay to hold it or mark it down. The service level worth buying is where those two costs balance, and it is a ratio you can compute: <strong>Cu / (Cu + Co)</strong>.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 336" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A balance beam. Left pan, heavier: Cu, the cost of one unit too few, lost margin of GBP 6. Right pan, lighter: Co, the cost of one unit too many, markdown or holding of GBP 2. Under the fulcrum, the critical ratio Cu over Cu plus Co equals 6 over 8, 75 percent, the service level worth buying, which is z 0.67.">
+        <defs>
+          <filter id="s2cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s2cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s2cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s2cH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s2cL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s2cS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s2cA { font: 700 11px Inter, sans-serif; fill: #3D5020; }
+          .s2cN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s2cH" x="40" y="28">TWO COSTS ON ONE BEAM</text>
+        <text class="s2cS" x="230" y="28">constructed costs per unit, your numbers will differ</text>
+
+        <g filter="url(#s2cSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M200 176 L680 136" stroke-width="3"/>
+          <path d="M418 210 L440 160 L462 210 Z" fill="#C9D6A8"/>
+          <path d="M400 212 L480 212"/>
+          <path d="M210 175 L210 198"/>
+          <path d="M670 137 L670 158"/>
+          <rect x="120" y="200" width="180" height="62" rx="8" transform="rotate(-0.5 210 231)" fill="#F2F5E8"/>
+          <rect x="580" y="160" width="180" height="62" rx="8" transform="rotate(0.5 670 191)" fill="#FFFFFF"/>
+          <rect x="320" y="236" width="240" height="64" rx="10" transform="rotate(0.3 440 268)" fill="#F2C200"/>
+        </g>
+
+        <text class="s2cA" x="470" y="118">the beam tips toward the dearer mistake</text>
+
+        <text class="s2cH" x="134" y="222">Cu · ONE TOO FEW</text>
+        <text class="s2cL" x="134" y="240">lost margin: GBP 6</text>
+        <text class="s2cS" x="134" y="255">a sale that walked</text>
+
+        <text class="s2cH" x="594" y="182">Co · ONE TOO MANY</text>
+        <text class="s2cL" x="594" y="200">leftover cost: GBP 2</text>
+        <text class="s2cS" x="594" y="215">markdown or holding</text>
+
+        <text class="s2cH" x="440" y="256" text-anchor="middle">CRITICAL RATIO</text>
+        <text class="s2cL" x="440" y="274" text-anchor="middle">Cu / (Cu + Co) = 6 / 8 = 75%</text>
+        <text class="s2cL" x="440" y="291" text-anchor="middle">the service level worth buying</text>
+
+        <text class="s2cN" x="40" y="324">75% is z 0.67: stock above the mean forecast, and well below a reflex 95%.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the service level is set by what each kind of mistake costs, not by how good a high number sounds</figcaption>
+    </figure>
+
+    <div id="asc-news"></div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Service level is a price, not a virtue<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The newsvendor widget opens at Cu GBP 6 and Co GBP 2, constructed costs for a Northwick lantern, and prints <strong>75.0%</strong> with a z of <strong>0.67</strong>. That is the level at which one more unit of stock is expected to save as much lost margin as it costs in leftovers. Above it, every extra point of service costs more than it earns.</p>
+        <p>Now drag Co up to GBP 6, the same as Cu: the ratio falls to 50 percent and z to zero, stock equal to the mean forecast. Drag Cu to GBP 18 with Co at GBP 2: 90 percent. The number moves with the economics of the product, which is the point. A blanket "95 percent on everything" is a choice to pay the same price for service on a lantern with a fat margin and a card that marks down to nothing.</p>
+        <div class="callout tip">
+          <p><strong>Say it in the meeting.</strong> "What does one lost sale cost us on this item, and what does one leftover cost?" If nobody knows, the service target is a habit, not a decision.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>A worked example, and tiering by ABC<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>MIT OpenCourseWare 15.772J's lecture notes on the newsvendor inventory problem work an example against a <strong>critical fractile of 0.375</strong>. Read it at the source: a ratio below one half means the leftover costs more than the shortfall, and the right order sits <em>below</em> the mean forecast. The widget prints exactly that wording when you drag Co above Cu. Service below 50 percent can be the correct answer, and few planning teams ever write it down.</p>
+        <p><strong>Tiering by ABC is a newsvendor decision made in bulk.</strong> A items carry most of the revenue, so a stockout there loses the most margin: a higher Cu, a higher ratio, a higher target. C items are cheap and often slow, so a leftover is relatively expensive: a lower target. The "98 / 95 / 90" tiers in the build-along are that logic in round numbers. They should be re-derived from your own margins, not copied.</p>
+        <p>The newsvendor is a one-period model: the leftover is lost or marked down. For staples that roll into next week, Co is mostly the holding cost, which pushes the ratio up. Session 6 prices holding cost at Northwick's constructed 25 percent a year.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Northwick's stock policy, checked on 26 weeks it never saw</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">The stock widget takes each forecaster's own one-week error from session 1, sizes safety stock for the same 45 real SKUs with z x sigma x sqrt(L), values it at the real average prices, and then checks it one week ahead on the 26 holdout weeks: 1,170 SKU-weeks, each covered or not. Everything is computed in your browser. Lead time is 2 weeks unless a step says otherwise.</p>
+
+    <div id="asc-stock"></div>
+
+    <div class="steps">
+      <div class="step"><p><strong>Start flat.</strong> Click "95% on everything". Safety stock reads <strong>GBP 11,854</strong> and service achieved <strong>93.3%</strong>. Read the class meters: A items reach 96.4 percent against 95, but C items reach only <strong>89.0 percent</strong>. One target, and the jumpy, low-value items fall short of it.</p>
+        <div class="prompt-box good"><span class="label">★ Flat 95%, 8-week average</span>
+stock GBP 11,854 · achieved 93.3%
+A 96.4% (target 95%) · C 89.0% (target 95%)</div></div>
+      <div class="step"><p><strong>Tier by ABC.</strong> Click "Tier by ABC: 98 / 95 / 90". Stock rises to <strong>GBP 14,184</strong>, GBP 2,330 more than flat, almost all of it on A items. A reaches <strong>97.4 percent against a 98 percent target</strong>; C reaches 87.2 against 90. More money went where the margin is, and the policy still delivered less than it promised on every class it lifted.</p>
+        <div class="prompt-box good"><span class="label">★ Tiered 98 / 95 / 90</span>
+stock GBP 14,184 (+GBP 2,330 vs flat) · achieved 93.1%
+A 97.4% vs 98% · C 87.2% vs 90%</div></div>
+      <div class="step"><p><strong>Swap in the learned model.</strong> Click "Same tiers, learned model". Stock falls to <strong>GBP 13,668</strong>: its sigma is smaller, so the same z buys a thinner buffer. But service falls too, to <strong>92.1 percent</strong>, A 95.9, C 86.2. The learned model runs 17.3 percent short (session 1), and the buffer is spent covering the lean. Its sigma was also measured on weeks it trained on, which flatters it.</p>
+        <div class="prompt-box good"><span class="label">★ Same tiers, learned model</span>
+stock GBP 13,668 · achieved 92.1%
+A 95.9% · C 86.2%: cheaper stock, worse service</div></div>
+      <div class="step"><p><strong>Try the naive forecast.</strong> Click "Same tiers, naive forecast". The noisiest forecaster needs the most buffer: <strong>GBP 17,852</strong>, GBP 3,668 more than the 8-week average with the same tiers, for 93.8 percent achieved against 93.1. A 97.7, C 87.9. A worse forecast is paid for in stock, and the money buys very little service.</p>
+        <div class="prompt-box good"><span class="label">★ Same tiers, naive</span>
+stock GBP 17,852 · achieved 93.8%
+A 97.7% · C 87.9%: most stock, little gain</div></div>
+      <div class="step"><p><strong>Stretch the lead time.</strong> Click "Lead time 6 weeks". Stock jumps to <strong>GBP 24,567</strong>, which is the tiered GBP 14,184 x sqrt(6 / 2) = x sqrt(3), about <strong>1.73x</strong>. Service achieved stays at 93.1 percent, exactly the tiered rung. That is not a free lunch: the widget's check is one week ahead and does not change with L, so it cannot show the extra exposure. Read this rung for the cost, not the service.</p>
+        <div class="prompt-box good"><span class="label">★ Lead time 6 weeks</span>
+stock GBP 24,567 = GBP 14,184 x 1.73
+achieved 93.1%: the weekly check ignores L</div></div>
+      <div class="step"><p><strong>Write the stock policy into the playbook.</strong> Copy this into section 2 of your own version of Northwick's playbook, under section 1's error budget, and replace the numbers with yours when you have them.</p>
+        <div class="prompt-box good"><span class="label">★ Playbook section 2 · the stock policy</span>
+Service target per ABC class: A 98%, B 95%, C 90%, from our own Cu and Co.
+Target = cycle service level; fill rate reported beside it.
+Sigma = our own forecaster's error on holdout weeks, never a vendor's.
+Bias corrected before sizing: the learned model runs 17% short.
+Re-measure monthly: achieved vs target, per class.
+Owner: the inventory planning lead.
+Constructed Northwick example on real UCI demand. Yours will differ.</div></div>
+    </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Northwick's AI planning playbook as a one-page document with six sections. Section 1, the forecast-error budget, is done in session 1. Section 2, the stock policy, is filled tonight. Sections 3 to 6 are empty. Tonight's section names a service target per ABC class, sigma from the holdout error, bias corrected before sizing, a monthly re-measure and the owner.">
+        <defs>
+          <filter id="s2dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s2dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#3D5020" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s2dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#18200C" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s2dH { font: 800 12px Inter, sans-serif; fill: #18200C; }
+          .s2dL { font: 600 12px Inter, sans-serif; fill: #18200C; }
+          .s2dS { font: 400 11px Inter, sans-serif; fill: #4F5842; }
+          .s2dA { font: 700 11px Inter, sans-serif; fill: #3D5020; }
+          .s2dN { font: 400 12px Inter, sans-serif; fill: #4F5842; }
+        </style>
+
+        <text class="s2dH" x="40" y="28">NORTHWICK'S AI PLANNING PLAYBOOK</text>
+        <text class="s2dS" x="310" y="28">constructed, one page</text>
+
+        <g filter="url(#s2dSk)" fill="none" stroke="#18200C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="40" width="360" height="226" rx="6" transform="rotate(-0.5 220 153)" fill="#FFFFFF"/>
+          <rect x="54" y="52" width="332" height="30" rx="4" fill="#F2F5E8" stroke="#3D5020"/>
+          <rect x="54" y="88" width="332" height="30" rx="4" fill="#F2C200"/>
+          <rect x="54" y="124" width="332" height="30" rx="4" fill="url(#s2dHc)" stroke="#CDD3BF"/>
+          <rect x="54" y="160" width="332" height="30" rx="4" fill="url(#s2dHc)" stroke="#CDD3BF"/>
+          <rect x="54" y="196" width="332" height="30" rx="4" fill="url(#s2dHc)" stroke="#CDD3BF"/>
+          <rect x="54" y="232" width="332" height="26" rx="4" fill="url(#s2dHc)" stroke="#CDD3BF"/>
+          <path d="M392 103 C420 103 420 90 436 90" marker-end="url(#s2dAr)"/>
+          <rect x="444" y="52" width="410" height="206" rx="10" transform="rotate(0.4 649 155)" fill="#F2F5E8"/>
+        </g>
+
+        <text class="s2dL" x="66" y="72">1 · Forecast-error budget</text>
+        <text class="s2dA" x="376" y="72" text-anchor="end">done, s1</text>
+        <text class="s2dL" x="66" y="108">2 · Stock policy</text>
+        <text class="s2dL" x="376" y="108" text-anchor="end">tonight</text>
+        <text class="s2dL" x="66" y="144">3 · Allocation rules</text>
+        <text class="s2dS" x="376" y="144" text-anchor="end">s3</text>
+        <text class="s2dL" x="66" y="180">4 · Disruption playbook</text>
+        <text class="s2dS" x="376" y="180" text-anchor="end">s4</text>
+        <text class="s2dL" x="66" y="216">5 · Override rules</text>
+        <text class="s2dS" x="376" y="216" text-anchor="end">s5</text>
+        <text class="s2dL" x="66" y="250">6 · Business case</text>
+        <text class="s2dS" x="376" y="250" text-anchor="end">s6</text>
+
+        <text class="s2dH" x="462" y="80">TONIGHT'S SECTION</text>
+        <text class="s2dL" x="462" y="108">Target per ABC class: 98 / 95 / 90.</text>
+        <text class="s2dL" x="462" y="132">Sigma from our own holdout error.</text>
+        <text class="s2dL" x="462" y="156">Bias corrected before sizing.</text>
+        <text class="s2dL" x="462" y="180">Re-measure monthly, per class.</text>
+        <text class="s2dL" x="462" y="204">Cycle service level, fill rate beside it.</text>
+        <text class="s2dL" x="462" y="236">Owner: the inventory planning lead.</text>
+
+        <text class="s2dN" x="40" y="290">Two sections done. Section 2 spends section 1's error budget as stock.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the stock policy is the first place the error budget turns into money</figcaption>
+    </figure>
+
+    <div class="wipe" data-title="The same target, reported two ways" data-label-a="Vendor slide" data-label-b="Northwick's holdout check" data-foot="Drag to compare. The vendor line is constructed; the holdout line is the bench's.">
+      <div class="wipe-a">
+        <p><strong>98% service on your A items.</strong></p>
+        <p>z set for 98 percent, sigma from the fitted history. One number, no holdout, no word on which service.</p>
+      </div>
+      <div class="wipe-b">
+        <p><strong>97.4% delivered on 26 unseen weeks.</strong></p>
+        <p>Cycle service level, one week ahead, 45 real SKUs. Short of the target the formula promised.</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Why every target came in short.</strong> Sigma was measured on weeks 52 to 77; the check ran on weeks 78 to 103. The next stretch of demand is rarely as tame as the stretch you measured, so error measured on the past understates the error you meet next. The fix is not a bigger formula: it is to measure achieved service every month and raise sigma, or z, where a class keeps falling short.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 3</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Find your service definition.</strong> Look up the service target your team reports today. Is it cycle service level or fill rate, and over which weeks is it measured? If nobody can say, write that down.</li>
+      <li><strong>Price one mistake each way.</strong> For one A item and one C item, write down Cu (margin lost per unit short) and Co (cost per unit left over). Put both into the newsvendor widget and note the service level each one is worth.</li>
+      <li><strong>Check one promise.</strong> For one class, compare last quarter's service target with the share of weeks it was actually met. Is the gap the same sign as on the bench?</li>
+      <li><strong>Draft section 2.</strong> Write your own stock policy in the lines of tonight's playbook section: target per class, where sigma comes from, how bias is corrected, how often you re-measure, and the owner.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and session 2 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Lead time goes from 2 weeks to 6. Error and service target stay the same. What happens to safety stock?</p>
+      <button class="qopt" type="button">A · It triples, because there are three times as many weeks to cover</button>
+      <button class="qopt" type="button">B · It stays the same, because the weekly error has not changed</button>
+      <button class="qopt" type="button">C · It grows by sqrt(3), about 1.73x, because independent weekly errors add in variance</button>
+      <p class="qwhy">sqrt(6) / sqrt(2) = sqrt(3), about 1.73. On the bench the tiered policy goes from GBP 14,184 to GBP 24,567. Errors that run in streaks would need more than that.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · The tiered policy set z for 98 percent on A items and delivered 97.4 percent on the holdout. Why?</p>
+      <button class="qopt" type="button">A · Sigma was measured on past weeks, and error measured on the past understates the next error</button>
+      <button class="qopt" type="button">B · The z value for 98 percent was looked up wrongly</button>
+      <button class="qopt" type="button">C · A items always miss their target, whatever the policy</button>
+      <p class="qwhy">z = 2.054 is right for 98 percent. The sigma it multiplies came from weeks 52 to 77; the next 26 weeks were rougher. That is why the playbook re-measures achieved service every month.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">3 · One unit too few loses GBP 6 of margin. One unit too many costs GBP 2. Which service level is worth buying?</p>
+      <button class="qopt" type="button">A · 95 percent, the usual default</button>
+      <button class="qopt" type="button">B · 75 percent, from Cu / (Cu + Co) = 6 / 8</button>
+      <button class="qopt" type="button">C · 25 percent, from Co / (Cu + Co)</button>
+      <p class="qwhy">The critical ratio is Cu / (Cu + Co) = 0.75, which the newsvendor widget prints as 75.0 percent with z 0.67. Above it, an extra point of service costs more in leftovers than it saves in lost margin.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ OFFICIAL COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Silver, Pyke, Thomas, Inventory and Production Management in Supply Chains (4th ed., CRC Press, 2017)</span><span class="note">Safety stock = k x sigma_L, cycle service level vs fill rate, expected units short. Taught as the standard formulas; edition confirmed at the publisher, no page numbers cited</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">MIT OpenCourseWare 15.772J, Newsvendor Inventory Problem</span><span class="note">Critical fractile Cu / (Cu + Co); the worked example compares against a critical fractile of 0.375. Read at source</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">UCI Online Retail II (Chen, 2012)</span><span class="note">CC BY 4.0, doi 10.24432/C5CG6D. The same 45 real SKUs as session 1; stock policy checked on 1,170 holdout SKU-weeks</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Session 1 forecast-error budget</span><span class="note">8-week average 79.6 percent WAPE; learned model 77.5 percent and -17.3 percent bias, measured on the bench and reused here as sigma and as the lean</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 2 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Safety stock</b><span>z x sigma x sqrt(L). Error, target and lead time, multiplied.</span></div>
+      <div class="cheat-item"><b>z</b><span>95 percent: 1.645. 98 percent: 2.054. Service gets dear near the top.</span></div>
+      <div class="cheat-item"><b>sqrt(L)</b><span>Lead time 2 to 6 weeks: stock x 1.73, not x 3. Streaky errors need more.</span></div>
+      <div class="cheat-item"><b>Cycles or units</b><span>Cycle service level counts bad cycles; fill rate counts missing units. Always say which.</span></div>
+      <div class="cheat-item"><b>Critical ratio</b><span>Cu / (Cu + Co). GBP 6 vs GBP 2 is worth 75 percent, not 95.</span></div>
+      <div class="cheat-item"><b>Check on unseen weeks</b><span>Past error understates the next. 98 percent promised, 97.4 delivered. Correct bias first.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Tonight the stock was always there to set. Session 3 is the week it is not: 1,200 lanterns for 1,600 wanted across North stores, South stores and online. Four allocation rules, four different answers, and one of them gives online nothing at all.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Session 2 of 6 · learn-ai-supply-chain-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="01-every-forecast-is-wrong.html">← Prev: Every forecast is wrong: budget the error</a> &nbsp;·&nbsp; <a href="03-allocate-scarce-stock.html">Next: Allocate scarce stock: rules before optimisers →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/asc-sample.js?v=1"></script>
+<script src="../assets/asc-live.js?v=1"></script>
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>
